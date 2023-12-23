@@ -1,5 +1,6 @@
+BasedOnStyle: LLVM
 UseTab: Always
 IndentWidth: 4
 TabWidth: 4
 ColumnLimit: 120
-AllowShortFunctionsOnASingleLine: Empty
+# AllowShortFunctionsOnASingleLine: Empty
