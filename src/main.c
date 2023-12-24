@@ -1,5 +1,5 @@
-#include "../include/scene/controls.h"
-#include "../include/scene/scene.h"
+#include "scene/controls.h"
+#include "scene/scene.h"
 #include <raylib.h>
 
 void update(Scene *app, Controls *controls) {

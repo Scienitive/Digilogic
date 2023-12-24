@@ -1,5 +1,5 @@
-#include "../../include/scene/scene.h"
-#include "raylib.h"
+#include "scene.h"
+#include <raylib.h>
 
 void draw_scene(Scene *app) {
 	Vector2 obj1;

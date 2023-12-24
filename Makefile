@@ -1,31 +1,31 @@
 NAME=digilogic
 CC=clang
-CFLAGS=-g -Wextra -Wall
 
 SRC_DIR=src
 OBJ_DIR=obj
 BIN_DIR=bin
 
+CFLAGS=-g -Wextra -Wall $(shell pkg-config --cflags raylib)
+LDFLAGS=$(shell pkg-config --libs raylib)
+
 SRCS=$(shell find $(SRC_DIR) -name '*.c')
 OBJS=$(patsubst $(SRC_DIR)/*.c, $(OBJ_DIR)/*.o, $(SRCS))
 BIN=$(BIN_DIR)/$(NAME)
 
-INC=`pkg-config --cflags raylib`
-LIBS=`pkg-config --libs raylib`
-
-
 all: $(BIN) run
 
 $(BIN): $(OBJS)
-	$(CC) $(INC) $(CFLAGS) $(OBJS) $(LIBS) -o $@
+	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(INC) $(CFLAGS) -c $< $(LIBS) -o $@
+	$(CC) $(CFLAGS) -c $< $(LDFLAGS) -o $@
 
 clean:
 	$(RM) -r $(BIN_DIR)/* $(OBJ_DIR)/*
 
+re: clean all
+
 run:
 	./$(BIN_DIR)/$(NAME)
 
-.PHONY: clean run
+.PHONY: clean run re

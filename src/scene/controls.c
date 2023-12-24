@@ -1,6 +1,6 @@
-#include "../../include/scene/controls.h"
-#include "../../include/scene/scene.h"
-#include "raylib.h"
+#include "controls.h"
+#include "scene.h"
+#include <raylib.h>
 
 static void mouse_movement(Scene *app, Controls *controls) {
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && !controls->mouse_pressed) {
