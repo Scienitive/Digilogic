@@ -3,10 +3,18 @@
 
 #include "raylib.h"
 
-typedef struct Scene {
-	Vector2 pos;
-} Scene;
+typedef struct Cam {
+	Vector2 offset;
+	Vector2 start_pan;
+	Vector2 scale;
+} Cam;
 
-void draw_scene(Scene *app);
+typedef struct App {
+	Cam cam;
+} App;
+
+void draw_scene(App *app);
+Vector2 world_to_screen(App *app, Vector2 world);
+Vector2 screen_to_world(App *app, Vector2 screen);
 
 #endif

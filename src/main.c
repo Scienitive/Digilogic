@@ -2,11 +2,11 @@
 #include "scene/scene.h"
 #include <raylib.h>
 
-void update(Scene *app, Controls *controls) {
-	input_handler(app, controls);
+void update(App *app) {
+	input_handler(app);
 }
 
-void draw(Scene *app) {
+void draw(App *app) {
 	BeginDrawing();
 	ClearBackground(RAYWHITE);
 	draw_scene(app);
@@ -23,12 +23,18 @@ int main(void) {
 	SetWindowMinSize(800, 450);
 
 	// General Structs
-	Scene app = {{0, 0}};
-	Controls controls = {false, GetMousePosition()};
+	App app = {
+		.cam =
+			{
+				.scale = {1, 1},
+				.offset = {-GetScreenWidth() / 2.0, -GetScreenHeight() / 2.0},
+				.start_pan = {0, 0},
+			},
+	};
 
 	// The Loop
 	while (!WindowShouldClose()) {
-		update(&app, &controls);
+		update(&app);
 		draw(&app);
 	}
 
