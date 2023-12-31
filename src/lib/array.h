@@ -11,9 +11,9 @@ typedef struct Array {
 } Array;
 
 void init_array(Array *arr, size_t size);
-void push(Array *arr, const void *element);
-void *at(Array *arr, size_t index);
-void erase(Array *arr, size_t index);
+void push_array(Array *arr, const void *element);
+void *at_array(Array *arr, size_t index);
+void erase_array(Array *arr, size_t index);
 void free_array(Array *arr);
 
 #endif
