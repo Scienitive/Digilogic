@@ -40,22 +40,10 @@ void draw_scene(App *app) {
 				  100 * app->cam.scale.x, 100 * app->cam.scale.y, GREEN);
 }
 
-void draw_ui(App *app) {
-	const int MAX_UI_HEIGHT = 64;
-	const int MIN_UI_HEIGHT = 32;
-
-	int ui_height = GetScreenHeight() / 12;
-	if (ui_height > MAX_UI_HEIGHT) {
-		ui_height = MAX_UI_HEIGHT;
-	} else if (ui_height < MIN_UI_HEIGHT) {
-		ui_height = MIN_UI_HEIGHT;
-	}
-
+void draw_top_buttons(App *app, int ui_height) {
 	const int SIDE_MARGIN = 16;
 	const int BUTTON_GAP = 16;
 	const float BUTTON_HEIGHT_RATIO = 0.8;
-	// Top
-	DrawRectangle(0, 0, GetScreenWidth(), ui_height, YELLOW);
 
 	// Top Left Buttons
 	for (size_t i = 0; i < app->buttons.top_left.size; i++) {
@@ -96,6 +84,22 @@ void draw_ui(App *app) {
 		button->positon = pos;
 		draw_button(button);
 	}
+}
+
+void draw_ui(App *app) {
+	const int MAX_UI_HEIGHT = 64;
+	const int MIN_UI_HEIGHT = 32;
+
+	int ui_height = GetScreenHeight() / 12;
+	if (ui_height > MAX_UI_HEIGHT) {
+		ui_height = MAX_UI_HEIGHT;
+	} else if (ui_height < MIN_UI_HEIGHT) {
+		ui_height = MIN_UI_HEIGHT;
+	}
+
+	// Top
+	DrawRectangle(0, 0, GetScreenWidth(), ui_height, YELLOW);
+	draw_top_buttons(app, ui_height);
 
 	// Bottom
 	DrawRectangle(0, GetScreenHeight() - ui_height, GetScreenWidth(), ui_height, YELLOW);

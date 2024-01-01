@@ -1,11 +1,17 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "../component/component.h"
 #include "../lib/array.h"
 #include "button.h"
 #include "raylib.h"
 
 typedef struct Button Button;
+
+typedef struct ComponentGroup {
+	const char *name;
+	Array comp;
+} ComponentGroup;
 
 typedef struct ButtonGroups {
 	Array top_left;
@@ -21,6 +27,7 @@ typedef struct Cam {
 typedef struct App {
 	Cam cam;
 	ButtonGroups buttons;
+	Array comp_group;
 } App;
 
 void draw_scene(App *app);

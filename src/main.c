@@ -1,3 +1,4 @@
+#include "lib/array.h"
 #include "scene/button.h"
 #include "scene/controls.h"
 #include "scene/scene.h"
@@ -38,6 +39,7 @@ int main(void) {
 				.start_pan = {0, 0},
 			},
 	};
+	init_array(&app.comp_group, sizeof(ComponentGroup));
 
 	// Initialize
 	start(&app);
