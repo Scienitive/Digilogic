@@ -14,11 +14,12 @@ private:
 
 public:
 	Container();
-	~Container();
+	virtual ~Container();
 
 	void add_child(Container *cont);
 
-	void draw();
+	Vector2 get_screen_pos();
+	virtual void draw();
 };
 
 #endif

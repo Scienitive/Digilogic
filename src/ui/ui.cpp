@@ -1,5 +1,8 @@
 #include "ui.hpp"
+#include "button.hpp"
 #include "container.hpp"
+#include "yoga/YGNodeLayout.h"
+#include <iostream>
 #include <raylib.h>
 #include <yoga/YGNodeStyle.h>
 #include <yoga/Yoga.h>
@@ -37,6 +40,18 @@ void UI::draw() {
 
 void UI::calculate_layout() {
 	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
+
+	// Set all button widths
+	float padding_top = YGNodeLayoutGetPadding(this->containers.github_button->node, YGEdgeTop);
+	float padding_bot = YGNodeLayoutGetPadding(this->containers.github_button->node, YGEdgeBottom);
+	float padding_left = YGNodeLayoutGetPadding(this->containers.github_button->node, YGEdgeLeft);
+	float padding_right = YGNodeLayoutGetPadding(this->containers.github_button->node, YGEdgeRight);
+
+	float height = YGNodeLayoutGetHeight(this->containers.github_button->node) - (padding_top + padding_bot);
+	float width = this->containers.github_button->text_label->set_size_from_height(height);
+	YGNodeStyleSetWidth(this->containers.github_button->node, width + padding_left + padding_right);
+
+	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
 }
 
 void UI::set_all_containers() {
@@ -52,13 +67,47 @@ void UI::set_all_containers() {
 }
 
 void UI::set_top_container(Color color, float height_perc, float height_min, float height_max) {
+	// Top
 	Container *top = new Container();
 	top->color = color;
 	YGNodeStyleSetHeightPercent(top->node, height_perc);
 	YGNodeStyleSetMinHeight(top->node, height_min);
 	YGNodeStyleSetMaxHeight(top->node, height_max);
+	YGNodeStyleSetFlexDirection(top->node, YGFlexDirectionRow);
+	this->containers.main->add_child(top);
 	this->containers.top = top;
-	this->containers.main->add_child(this->containers.top);
+
+	// Top Children
+	Container *top_left = new Container();
+	this->containers.top->add_child(top_left);
+	this->containers.top_left = top_left;
+	Container *top_middle = new Container();
+	this->containers.top->add_child(top_middle);
+	this->containers.top_middle = top_middle;
+	Container *top_right = new Container();
+	this->containers.top->add_child(top_right);
+	this->containers.top_right = top_right;
+
+	// Width, Height, Padding and FlexDirection Settings
+	YGNodeStyleSetWidthPercent(top_left->node, 33);
+	YGNodeStyleSetHeightPercent(top_left->node, 100);
+	YGNodeStyleSetFlexDirection(top_left->node, YGFlexDirectionRow);
+	YGNodeStyleSetPaddingPercent(top_left->node, YGEdgeAll, 0.8);
+	YGNodeStyleSetWidthPercent(top_middle->node, 34);
+	YGNodeStyleSetHeightPercent(top_middle->node, 100);
+	YGNodeStyleSetFlexDirection(top_middle->node, YGFlexDirectionRow);
+	YGNodeStyleSetPaddingPercent(top_middle->node, YGEdgeAll, 0.8);
+	YGNodeStyleSetWidthPercent(top_right->node, 33);
+	YGNodeStyleSetHeightPercent(top_right->node, 100);
+	YGNodeStyleSetFlexDirection(top_right->node, YGFlexDirectionRow);
+	YGNodeStyleSetPaddingPercent(top_right->node, YGEdgeAll, 0.8);
+
+	// Top Left
+	top_left->color = RED;
+	Button *github_button = new Button("GITHUB");
+	github_button->color = GREEN;
+	this->containers.top_left->add_child(github_button);
+	this->containers.github_button = github_button;
 }
 
 void UI::set_bot_container(Color color, float height_perc, float height_min, float height_max) {
@@ -67,13 +116,13 @@ void UI::set_bot_container(Color color, float height_perc, float height_min, flo
 	YGNodeStyleSetHeightPercent(bot->node, height_perc);
 	YGNodeStyleSetMinHeight(bot->node, height_min);
 	YGNodeStyleSetMaxHeight(bot->node, height_max);
+	this->containers.main->add_child(bot);
 	this->containers.bot = bot;
-	this->containers.main->add_child(this->containers.bot);
 }
 
 void UI::set_mid_container() {
 	Container *mid = new Container();
 	YGNodeStyleSetFlexGrow(mid->node, 1);
+	this->containers.main->add_child(mid);
 	this->containers.mid = mid;
-	this->containers.main->add_child(this->containers.mid);
 }

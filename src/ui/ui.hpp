@@ -1,6 +1,7 @@
 #ifndef UI_HPP
 #define UI_HPP
 
+#include "button.hpp"
 #include "container.hpp"
 
 struct AllContainers {
@@ -14,6 +15,9 @@ struct AllContainers {
 	Container *top_left;
 	Container *top_middle;
 	Container *top_right;
+
+	// Top Left
+	Button *github_button;
 };
 
 struct UI {

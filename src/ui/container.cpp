@@ -16,13 +16,25 @@ Container::~Container() {
 void Container::draw() {
 	float width = YGNodeLayoutGetWidth(this->node);
 	float height = YGNodeLayoutGetHeight(this->node);
-	float x = YGNodeLayoutGetLeft(this->node);
-	float y = YGNodeLayoutGetTop(this->node);
-	DrawRectangle(x, y, width, height, this->color);
+
+	Vector2 pos = this->get_screen_pos();
+	DrawRectangle(pos.x, pos.y, width, height, this->color);
 
 	for (Container *cont : this->children) {
 		cont->draw();
 	}
+}
+
+Vector2 Container::get_screen_pos() {
+	float x = YGNodeLayoutGetLeft(this->node);
+	float y = YGNodeLayoutGetTop(this->node);
+	YGNode *parent = YGNodeGetParent(this->node);
+	while (parent != nullptr) {
+		x += YGNodeLayoutGetLeft(parent) + YGNodeLayoutGetMargin(parent, YGEdgeLeft);
+		y += YGNodeLayoutGetTop(parent) + YGNodeLayoutGetMargin(parent, YGEdgeTop);
+		parent = YGNodeGetParent(parent);
+	}
+	return {x, y};
 }
 
 void Container::add_child(Container *cont) {
