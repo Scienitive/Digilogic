@@ -2,7 +2,6 @@
 #include "button.hpp"
 #include "container.hpp"
 #include "yoga/YGNodeLayout.h"
-#include <iostream>
 #include <raylib.h>
 #include <yoga/YGNodeStyle.h>
 #include <yoga/Yoga.h>
@@ -38,18 +37,31 @@ void UI::draw() {
 	this->containers.main->draw();
 }
 
+void UI::apply_func_to_all_buttons(Container *cont, std::function<void(Button *)> func) {
+	Button *possible_button = dynamic_cast<Button *>(cont);
+	if (possible_button != nullptr) {
+		func(possible_button);
+	} else {
+		for (Container *c : cont->get_children()) {
+			apply_func_to_all_buttons(c, func);
+		}
+	}
+}
+
 void UI::calculate_layout() {
 	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
 
 	// Set all button widths
-	float padding_top = YGNodeLayoutGetPadding(this->containers.github_button->node, YGEdgeTop);
-	float padding_bot = YGNodeLayoutGetPadding(this->containers.github_button->node, YGEdgeBottom);
-	float padding_left = YGNodeLayoutGetPadding(this->containers.github_button->node, YGEdgeLeft);
-	float padding_right = YGNodeLayoutGetPadding(this->containers.github_button->node, YGEdgeRight);
+	this->apply_func_to_all_buttons(this->containers.main, [](Button *button) {
+		float padding_top = YGNodeLayoutGetPadding(button->node, YGEdgeTop);
+		float padding_bot = YGNodeLayoutGetPadding(button->node, YGEdgeBottom);
+		float padding_left = YGNodeLayoutGetPadding(button->node, YGEdgeLeft);
+		float padding_right = YGNodeLayoutGetPadding(button->node, YGEdgeRight);
 
-	float height = YGNodeLayoutGetHeight(this->containers.github_button->node) - (padding_top + padding_bot);
-	float width = this->containers.github_button->text_label->set_size_from_height(height);
-	YGNodeStyleSetWidth(this->containers.github_button->node, width + padding_left + padding_right);
+		float height = YGNodeLayoutGetHeight(button->node) - (padding_top + padding_bot);
+		float width = button->text_label->set_size_from_height(height);
+		YGNodeStyleSetWidth(button->node, width + padding_left + padding_right);
+	});
 
 	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
 }

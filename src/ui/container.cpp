@@ -41,3 +41,7 @@ void Container::add_child(Container *cont) {
 	YGNodeInsertChild(this->node, cont->node, this->children.size());
 	this->children.push_back(cont);
 }
+
+const std::vector<Container *> Container::get_children() {
+	return this->children;
+}

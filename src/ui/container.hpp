@@ -17,6 +17,7 @@ public:
 	virtual ~Container();
 
 	void add_child(Container *cont);
+	const std::vector<Container *> get_children();
 
 	Vector2 get_screen_pos();
 	virtual void draw();
