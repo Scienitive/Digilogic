@@ -8,7 +8,6 @@
 struct Button : public Container {
 	TextLabel *text_label;
 
-	Button();
 	Button(std::string text);
 	~Button();
 

@@ -4,13 +4,6 @@
 #include "yoga/YGNodeStyle.h"
 #include <yoga/Yoga.h>
 
-Button::Button() {
-	this->text_label = new TextLabel();
-	YGNodeStyleSetPaddingPercent(this->node, YGEdgeAll, 2);
-	YGNodeStyleSetHeightPercent(this->node, 100);
-	YGNodeInsertChild(this->node, this->text_label->node, 0);
-}
-
 Button::Button(std::string text) {
 	this->text_label = new TextLabel(text);
 	YGNodeStyleSetPaddingPercent(this->node, YGEdgeAll, 2);

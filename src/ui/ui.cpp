@@ -59,8 +59,8 @@ void UI::calculate_layout() {
 		float padding_right = YGNodeLayoutGetPadding(button->node, YGEdgeRight);
 
 		float height = YGNodeLayoutGetHeight(button->node) - (padding_top + padding_bot);
-		float width = button->text_label->set_size_from_height(height);
-		YGNodeStyleSetWidth(button->node, width + padding_left + padding_right);
+		float width = button->text_label->set_size_from_height(height) + (padding_left + padding_right);
+		YGNodeStyleSetWidth(button->node, width);
 	});
 
 	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
@@ -104,15 +104,24 @@ void UI::set_top_container(Color color, float height_perc, float height_min, flo
 	YGNodeStyleSetWidthPercent(top_left->node, 33);
 	YGNodeStyleSetHeightPercent(top_left->node, 100);
 	YGNodeStyleSetFlexDirection(top_left->node, YGFlexDirectionRow);
-	YGNodeStyleSetPaddingPercent(top_left->node, YGEdgeAll, 0.8);
+	YGNodeStyleSetPadding(top_left->node, YGEdgeTop, 8);
+	YGNodeStyleSetPadding(top_left->node, YGEdgeBottom, 8);
+	YGNodeStyleSetPaddingPercent(top_left->node, YGEdgeLeft, 0.8);
+	YGNodeStyleSetPaddingPercent(top_left->node, YGEdgeRight, 0.8);
 	YGNodeStyleSetWidthPercent(top_middle->node, 34);
 	YGNodeStyleSetHeightPercent(top_middle->node, 100);
 	YGNodeStyleSetFlexDirection(top_middle->node, YGFlexDirectionRow);
-	YGNodeStyleSetPaddingPercent(top_middle->node, YGEdgeAll, 0.8);
+	YGNodeStyleSetPadding(top_middle->node, YGEdgeTop, 8);
+	YGNodeStyleSetPadding(top_middle->node, YGEdgeBottom, 8);
+	YGNodeStyleSetPaddingPercent(top_middle->node, YGEdgeLeft, 0.8);
+	YGNodeStyleSetPaddingPercent(top_middle->node, YGEdgeRight, 0.8);
 	YGNodeStyleSetWidthPercent(top_right->node, 33);
 	YGNodeStyleSetHeightPercent(top_right->node, 100);
 	YGNodeStyleSetFlexDirection(top_right->node, YGFlexDirectionRow);
-	YGNodeStyleSetPaddingPercent(top_right->node, YGEdgeAll, 0.8);
+	YGNodeStyleSetPadding(top_right->node, YGEdgeTop, 8);
+	YGNodeStyleSetPadding(top_right->node, YGEdgeBottom, 8);
+	YGNodeStyleSetPaddingPercent(top_right->node, YGEdgeLeft, 0.8);
+	YGNodeStyleSetPaddingPercent(top_right->node, YGEdgeRight, 0.8);
 
 	// Top Left
 	top_left->color = RED;
