@@ -15,8 +15,8 @@ TextLabel::~TextLabel() {}
 
 void TextLabel::draw() {
 	Container::draw();
-	Vector2 pos = this->get_screen_pos();
-	DrawTextEx(this->get_font(), this->text.c_str(), pos, this->font_size, this->spacing, this->text_color);
+	this->set_screen_pos();
+	DrawTextEx(this->get_font(), this->text.c_str(), this->pos, this->font_size, this->spacing, this->text_color);
 }
 
 float TextLabel::set_size_from_height(float height) {

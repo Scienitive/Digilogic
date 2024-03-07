@@ -23,6 +23,9 @@ int main() {
 		ClearBackground(WHITE);
 		ui.draw();
 		EndDrawing();
+
+		// Late Step
+		ui.late_step();
 	}
 
 	return 0;

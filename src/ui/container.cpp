@@ -14,18 +14,39 @@ Container::~Container() {
 }
 
 void Container::draw() {
+	// Set position and size
 	float width = YGNodeLayoutGetWidth(this->node);
 	float height = YGNodeLayoutGetHeight(this->node);
+	this->set_screen_pos();
 
-	Vector2 pos = this->get_screen_pos();
-	DrawRectangle(pos.x, pos.y, width, height, this->color);
+	DrawRectangle(this->pos.x, this->pos.y, width, height, this->color);
 
 	for (Container *cont : this->children) {
 		cont->draw();
 	}
 }
 
-Vector2 Container::get_screen_pos() {
+void Container::late_step() {
+	this->set_hovered();
+
+	for (Container *cont : this->children) {
+		cont->late_step();
+	}
+}
+
+void Container::set_hovered() {
+	Vector2 cursor_pos = GetMousePosition();
+	Vector2 size = {YGNodeLayoutGetWidth(this->node), YGNodeLayoutGetHeight(this->node)};
+
+	if ((cursor_pos.x >= this->pos.x && cursor_pos.x <= this->pos.x + size.x) && cursor_pos.y >= this->pos.y &&
+		cursor_pos.y <= this->pos.y + size.y) {
+		this->hovered = true;
+	} else {
+		this->hovered = false;
+	}
+}
+
+void Container::set_screen_pos() {
 	float x = YGNodeLayoutGetLeft(this->node);
 	float y = YGNodeLayoutGetTop(this->node);
 	YGNode *parent = YGNodeGetParent(this->node);
@@ -34,7 +55,7 @@ Vector2 Container::get_screen_pos() {
 		y += YGNodeLayoutGetTop(parent) + YGNodeLayoutGetMargin(parent, YGEdgeTop);
 		parent = YGNodeGetParent(parent);
 	}
-	return {x, y};
+	this->pos = {x, y};
 }
 
 void Container::add_child(Container *cont) {

@@ -8,6 +8,8 @@
 struct Container {
 	YGNodeRef node;
 	Color color;
+	Vector2 pos;
+	bool hovered;
 
 private:
 	std::vector<Container *> children;
@@ -19,8 +21,11 @@ public:
 	void add_child(Container *cont);
 	const std::vector<Container *> get_children();
 
-	Vector2 get_screen_pos();
+	void set_hovered();
+
+	void set_screen_pos();
 	virtual void draw();
+	virtual void late_step();
 };
 
 #endif

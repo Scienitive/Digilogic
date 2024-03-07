@@ -4,6 +4,7 @@
 #include "button.hpp"
 #include "container.hpp"
 #include <functional>
+#include <vector>
 
 struct AllContainers {
 	Container *main;
@@ -23,6 +24,9 @@ struct AllContainers {
 	// Top Right
 	Button *settings_button;
 	Button *exit_button;
+
+	// Bottom
+	std::vector<Button *> comp_group_buttons;
 };
 
 struct UI {
@@ -42,6 +46,7 @@ private:
 public:
 	void step();
 	void draw();
+	void late_step();
 	void calculate_layout();
 };
 

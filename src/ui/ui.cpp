@@ -37,6 +37,10 @@ void UI::draw() {
 	this->containers.main->draw();
 }
 
+void UI::late_step() {
+	this->containers.main->late_step();
+}
+
 void UI::apply_func_to_all_buttons(Container *cont, std::function<void(Button *)> func) {
 	Button *possible_button = dynamic_cast<Button *>(cont);
 	if (possible_button != nullptr) {

@@ -12,10 +12,13 @@ struct Button : public Container {
 	~Button();
 
 private:
+	bool old_hovered;
+
 	void set_size_auto();
 
 public:
 	void draw() override;
+	void late_step() override;
 };
 
 #endif
