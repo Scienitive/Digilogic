@@ -69,7 +69,7 @@ void UI::calculate_layout() {
 void UI::set_all_containers() {
 	// Top and bottom UI container settings
 	Color top_bot_bg_color = {53, 51, 51, 255};
-	float top_bot_height_percentage = 8;
+	float top_bot_height_percentage = 7;
 	float top_bot_min_height_px = 42;
 	float top_bot_max_height_px = 90;
 
@@ -108,6 +108,7 @@ void UI::set_top_container(Color color, float height_perc, float height_min, flo
 	YGNodeStyleSetPadding(top_left->node, YGEdgeBottom, 8);
 	YGNodeStyleSetPaddingPercent(top_left->node, YGEdgeLeft, 0.8);
 	YGNodeStyleSetPaddingPercent(top_left->node, YGEdgeRight, 0.8);
+	YGNodeStyleSetGap(top_left->node, YGGutterColumn, 12);
 	YGNodeStyleSetWidthPercent(top_middle->node, 34);
 	YGNodeStyleSetHeightPercent(top_middle->node, 100);
 	YGNodeStyleSetFlexDirection(top_middle->node, YGFlexDirectionRow);
@@ -122,13 +123,25 @@ void UI::set_top_container(Color color, float height_perc, float height_min, flo
 	YGNodeStyleSetPadding(top_right->node, YGEdgeBottom, 8);
 	YGNodeStyleSetPaddingPercent(top_right->node, YGEdgeLeft, 0.8);
 	YGNodeStyleSetPaddingPercent(top_right->node, YGEdgeRight, 0.8);
+	YGNodeStyleSetGap(top_right->node, YGGutterColumn, 12);
+	YGNodeStyleSetJustifyContent(top_right->node, YGJustifyFlexEnd);
 
 	// Top Left
-	top_left->color = RED;
 	Button *github_button = new Button("GITHUB");
-	github_button->color = GREEN;
+	github_button->color = {40, 211, 108, 255};
 	this->containers.top_left->add_child(github_button);
 	this->containers.github_button = github_button;
+
+	// Top Right
+	Button *settings_button = new Button("SETTINGS");
+	settings_button->color = {40, 201, 211, 255};
+	this->containers.top_right->add_child(settings_button);
+	this->containers.settings_button = settings_button;
+
+	Button *exit_button = new Button("EXIT");
+	exit_button->color = {211, 40, 40, 255};
+	this->containers.top_right->add_child(exit_button);
+	this->containers.exit_button = exit_button;
 }
 
 void UI::set_bot_container(Color color, float height_perc, float height_min, float height_max) {

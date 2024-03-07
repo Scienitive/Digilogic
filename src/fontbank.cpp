@@ -1,6 +1,5 @@
 #include "fontbank.hpp"
 #include <cmath>
-#include <iostream>
 #include <raylib.h>
 
 size_t PairHash::operator()(const std::pair<std::string, float> &p) const {
@@ -20,7 +19,6 @@ FontBank::~FontBank() {
 }
 
 Font FontBank::get_font(std::string font_name, float font_size) {
-	std::cout << this->font_list.size() << std::endl;
 	font_size = std::round(font_size);
 	std::pair<std::string, float> pair = {font_name, font_size};
 	const auto &map_entry = this->font_map.find(pair);

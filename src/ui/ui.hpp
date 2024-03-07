@@ -19,6 +19,10 @@ struct AllContainers {
 
 	// Top Left
 	Button *github_button;
+
+	// Top Right
+	Button *settings_button;
+	Button *exit_button;
 };
 
 struct UI {
