@@ -2,17 +2,16 @@
 #include "button.hpp"
 #include "container.hpp"
 #include "yoga/YGNodeLayout.h"
+#include <iostream>
 #include <raylib.h>
 #include <yoga/YGNodeStyle.h>
 #include <yoga/Yoga.h>
 
-UI::UI() {
+UI::UI() : modal_mode(false) {
 	// Set main_container and it's properties
 	this->containers.main = new Container();
 	this->containers.main->color = {217, 217, 217, 255};
 	YGNodeStyleSetFlexDirection(this->containers.main->node, YGFlexDirectionColumn);
-	/* YGNodeStyleSetHeightAuto(this->containers.main.node); */
-	/* YGNodeStyleSetWidthAuto(this->containers.main.node); */
 	YGNodeStyleSetWidthPercent(this->containers.main->node, 100);
 	YGNodeStyleSetHeightPercent(this->containers.main->node, 100);
 	YGNodeStyleSetJustifyContent(this->containers.main->node, YGJustifySpaceBetween);
@@ -42,6 +41,17 @@ void UI::step() {
 
 void UI::draw() {
 	this->containers.main->draw();
+
+	if (modal_mode) {
+		DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), {0, 0, 0, 180});
+	}
+
+	for (Container *cont : this->containers.main->get_children()) {
+		Modal *modal = dynamic_cast<Modal *>(cont);
+		if (modal != nullptr) {
+			modal->draw();
+		}
+	}
 }
 
 void UI::late_step() {
@@ -166,7 +176,7 @@ void UI::set_top_container(Color color, float height_perc, float height_min, flo
 
 	Button *exit_button = new Button("EXIT");
 	exit_button->color = {211, 40, 40, 255};
-	exit_button->set_on_click([this]() { this->containers.exit_modal->active = true; });
+	exit_button->set_on_click([this]() { this->containers.exit_modal->activate(); });
 	this->containers.top_right->add_child(exit_button);
 	this->containers.exit_button = exit_button;
 }

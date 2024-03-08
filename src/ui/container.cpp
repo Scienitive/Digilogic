@@ -1,4 +1,5 @@
 #include "container.hpp"
+#include "modal.hpp"
 #include "raylib.h"
 #include "ui.hpp"
 #include "yoga/YGNode.h"
@@ -31,7 +32,10 @@ void Container::draw() {
 	DrawRectangle(this->pos.x, this->pos.y, width, height, this->color);
 
 	for (Container *cont : this->children) {
-		cont->draw();
+		Modal *modal = dynamic_cast<Modal *>(cont);
+		if (modal == nullptr) {
+			cont->draw();
+		}
 	}
 }
 

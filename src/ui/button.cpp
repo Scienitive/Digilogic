@@ -1,6 +1,7 @@
 #include "button.hpp"
 #include "raylib.h"
 #include "textlabel.hpp"
+#include "ui.hpp"
 #include "yoga/YGNodeStyle.h"
 #include <functional>
 #include <yoga/Yoga.h>

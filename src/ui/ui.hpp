@@ -35,6 +35,7 @@ struct AllContainers {
 
 struct UI {
 	AllContainers containers;
+	bool modal_mode;
 
 	static UI &get();
 	~UI();

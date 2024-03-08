@@ -4,11 +4,13 @@
 #include "container.hpp"
 
 struct Modal : public Container {
-	bool active;
-
 	const int MAX_WIDTH = 500;
 	const int MAX_HEIGHT = 500;
 
+private:
+	bool active;
+
+public:
 	Modal();
 	~Modal();
 
@@ -17,6 +19,10 @@ struct Modal : public Container {
 	void step() override;
 	void draw() override;
 	void late_step() override;
+
+	void activate();
+	void deactivate();
+	bool is_active();
 };
 
 #endif

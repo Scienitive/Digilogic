@@ -1,4 +1,5 @@
 #include "modal.hpp"
+#include "ui.hpp"
 #include "yoga/YGNodeStyle.h"
 #include <yoga/Yoga.h>
 
@@ -29,4 +30,18 @@ void Modal::draw() {
 
 void Modal::late_step() {
 	Container::late_step();
+}
+
+void Modal::activate() {
+	this->active = true;
+	UI::get().modal_mode = true;
+}
+
+void Modal::deactivate() {
+	this->active = false;
+	UI::get().modal_mode = false;
+}
+
+bool Modal::is_active() {
+	return this->active;
 }
