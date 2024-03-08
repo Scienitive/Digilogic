@@ -31,6 +31,8 @@ void UI::step() {
 	if (IsWindowResized()) {
 		this->calculate_layout();
 	}
+
+	this->containers.main->step();
 }
 
 void UI::draw() {

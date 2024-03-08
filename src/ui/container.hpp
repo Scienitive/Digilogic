@@ -24,6 +24,8 @@ public:
 	void set_hovered();
 
 	void set_screen_pos();
+
+	virtual void step();
 	virtual void draw();
 	virtual void late_step();
 };

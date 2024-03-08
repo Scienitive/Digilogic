@@ -13,6 +13,14 @@ Container::~Container() {
 	}
 }
 
+void Container::step() {
+	this->set_hovered();
+
+	for (Container *cont : this->children) {
+		cont->step();
+	}
+}
+
 void Container::draw() {
 	// Set position and size
 	float width = YGNodeLayoutGetWidth(this->node);
@@ -27,8 +35,6 @@ void Container::draw() {
 }
 
 void Container::late_step() {
-	this->set_hovered();
-
 	for (Container *cont : this->children) {
 		cont->late_step();
 	}
