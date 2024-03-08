@@ -10,11 +10,16 @@ struct Modal : public Container {
 private:
 	bool active;
 
+	float aspect_ratio;
+	float height_percentage;
+	float height_max_px;
+
 public:
 	Modal();
 	~Modal();
 
-	void set_size(float width_percentage, float height_percentage);
+	void set_size(float aspect_ratio, float height_percentage, float height_max_px);
+	void calculate_layout();
 
 	void step() override;
 	void draw() override;

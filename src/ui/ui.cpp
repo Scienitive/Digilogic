@@ -69,6 +69,17 @@ void UI::apply_func_to_all_buttons(Container *cont, std::function<void(Button *)
 	}
 }
 
+void UI::apply_func_to_all_modals(Container *cont, std::function<void(Modal *)> func) {
+	Modal *possible_modal = dynamic_cast<Modal *>(cont);
+	if (possible_modal != nullptr) {
+		func(possible_modal);
+	} else {
+		for (Container *c : cont->get_children()) {
+			apply_func_to_all_modals(c, func);
+		}
+	}
+}
+
 void UI::calculate_layout() {
 	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
 
@@ -83,6 +94,9 @@ void UI::calculate_layout() {
 		float width = button->text_label->set_size_from_height(height) + (padding_left + padding_right);
 		YGNodeStyleSetWidth(button->node, width);
 	});
+
+	// Set all modal width, height and positions
+	this->apply_func_to_all_modals(this->containers.main, [](Modal *modal) { modal->calculate_layout(); });
 
 	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
 }
@@ -104,11 +118,7 @@ void UI::set_all_containers() {
 void UI::set_all_modals() {
 	Modal *exit_modal = new Modal();
 	exit_modal->color = RED;
-	exit_modal->set_size(16, 16);
-	/* YGNodeStyleSetHeightPercent(exit_modal->node, 16); */
-	/* YGNodeCalculateLayout(exit_modal->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR); */
-	/* float height_px = YGNodeStyleGetHeight(exit_modal->node).value; */
-	/* YGNodeStyleSetWidth(exit_modal->node, height_px * 1.5); */
+	exit_modal->set_size(16.0 / 9.0, 20, 300);
 	this->containers.main->add_child(exit_modal);
 	this->containers.exit_modal = exit_modal;
 }

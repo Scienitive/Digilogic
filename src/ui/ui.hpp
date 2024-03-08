@@ -52,12 +52,14 @@ private:
 	void set_bot_container(Color color, float height_perc, float height_min, float height_max);
 
 	void apply_func_to_all_buttons(Container *cont, std::function<void(Button *)> func);
+	void apply_func_to_all_modals(Container *cont, std::function<void(Modal *)> func);
 
 public:
+	void calculate_layout();
+
 	void step();
 	void draw();
 	void late_step();
-	void calculate_layout();
 };
 
 #endif
