@@ -135,6 +135,7 @@ void UI::set_top_container(Color color, float height_perc, float height_min, flo
 	// Top Left
 	Button *github_button = new Button("GITHUB");
 	github_button->color = {40, 211, 108, 255};
+	github_button->set_on_click([]() { OpenURL("https://github.com/Scienitive/Digilogic"); });
 	this->containers.top_left->add_child(github_button);
 	this->containers.github_button = github_button;
 
