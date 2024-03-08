@@ -3,6 +3,7 @@
 
 #include "button.hpp"
 #include "container.hpp"
+#include "modal.hpp"
 #include <functional>
 #include <vector>
 
@@ -12,6 +13,9 @@ struct AllContainers {
 	Container *top;
 	Container *mid;
 	Container *bot;
+
+	// Modals
+	Modal *exit_modal;
 
 	// Top
 	Container *top_left;
@@ -32,11 +36,16 @@ struct AllContainers {
 struct UI {
 	AllContainers containers;
 
-	UI();
+	static UI &get();
 	~UI();
+	UI(const UI &other) = delete;
+	UI &operator=(const UI &other) = delete;
 
 private:
+	UI();
+
 	void set_all_containers();
+	void set_all_modals();
 	void set_top_container(Color color, float height_perc, float height_min, float height_max);
 	void set_mid_container();
 	void set_bot_container(Color color, float height_perc, float height_min, float height_max);

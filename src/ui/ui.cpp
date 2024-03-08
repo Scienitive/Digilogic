@@ -26,6 +26,11 @@ UI::~UI() {
 	YGNodeFreeRecursive(this->containers.main->node);
 }
 
+UI &UI::get() {
+	static UI ui;
+	return ui;
+}
+
 void UI::step() {
 	// Recalculate Layout if
 	if (IsWindowResized()) {
@@ -82,6 +87,20 @@ void UI::set_all_containers() {
 	this->set_top_container(top_bot_bg_color, top_bot_height_percentage, top_bot_min_height_px, top_bot_max_height_px);
 	this->set_mid_container();
 	this->set_bot_container(top_bot_bg_color, top_bot_height_percentage, top_bot_min_height_px, top_bot_max_height_px);
+
+	this->set_all_modals();
+}
+
+void UI::set_all_modals() {
+	Modal *exit_modal = new Modal();
+	exit_modal->color = RED;
+	exit_modal->set_size(16, 16);
+	/* YGNodeStyleSetHeightPercent(exit_modal->node, 16); */
+	/* YGNodeCalculateLayout(exit_modal->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR); */
+	/* float height_px = YGNodeStyleGetHeight(exit_modal->node).value; */
+	/* YGNodeStyleSetWidth(exit_modal->node, height_px * 1.5); */
+	this->containers.main->add_child(exit_modal);
+	this->containers.exit_modal = exit_modal;
 }
 
 void UI::set_top_container(Color color, float height_perc, float height_min, float height_max) {
@@ -147,6 +166,7 @@ void UI::set_top_container(Color color, float height_perc, float height_min, flo
 
 	Button *exit_button = new Button("EXIT");
 	exit_button->color = {211, 40, 40, 255};
+	exit_button->set_on_click([this]() { this->containers.exit_modal->active = true; });
 	this->containers.top_right->add_child(exit_button);
 	this->containers.exit_button = exit_button;
 }

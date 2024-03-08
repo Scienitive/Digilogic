@@ -1,4 +1,4 @@
-#include "ui/ui.hpp"
+#include "app.hpp"
 #include <iostream>
 #include <raylib.h>
 #include <yoga/YGNodeStyle.h>
@@ -12,20 +12,20 @@ int main() {
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "DigiLogic");
 	SetWindowMinSize(800, 450);
 
-	UI ui = UI();
+	App &app = App::get();
 
 	while (!WindowShouldClose()) {
 		// Step
-		ui.step();
+		app.step();
 
 		// Draw
 		BeginDrawing();
 		ClearBackground(WHITE);
-		ui.draw();
+		app.draw();
 		EndDrawing();
 
 		// Late Step
-		ui.late_step();
+		app.late_step();
 	}
 
 	return 0;
