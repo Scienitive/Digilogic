@@ -2,12 +2,11 @@
 #include "button.hpp"
 #include "container.hpp"
 #include "yoga/YGNodeLayout.h"
-#include <iostream>
 #include <raylib.h>
 #include <yoga/YGNodeStyle.h>
 #include <yoga/Yoga.h>
 
-UI::UI() : modal_mode(false) {
+UI::UI() {
 	// Set main_container and it's properties
 	this->containers.main = new Container();
 	this->containers.main->color = {217, 217, 217, 255};
@@ -42,15 +41,13 @@ void UI::step() {
 void UI::draw() {
 	this->containers.main->draw();
 
-	if (modal_mode) {
-		DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), {0, 0, 0, 180});
-	}
-
-	for (Container *cont : this->containers.main->get_children()) {
-		Modal *modal = dynamic_cast<Modal *>(cont);
-		if (modal != nullptr) {
-			modal->draw();
+	size_t active_modal_count = this->active_modals.size();
+	for (size_t i = 0; i < active_modal_count; i++) {
+		if (i == active_modal_count - 1) {
+			DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), {0, 0, 0, 180});
 		}
+		Modal *modal = this->active_modals[i];
+		modal->draw();
 	}
 }
 

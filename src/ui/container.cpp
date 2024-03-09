@@ -16,10 +16,14 @@ Container::~Container() {
 }
 
 void Container::step() {
-	this->set_hovered();
+	UI &ui = UI::get();
+	if (this == ui.containers.main || ui.active_modals.size() <= 0 ||
+		(this->am_i_child_of_this(ui.active_modals[ui.active_modals.size() - 1]))) {
+		this->set_hovered();
 
-	for (Container *cont : this->children) {
-		cont->step();
+		for (Container *cont : this->children) {
+			cont->step();
+		}
 	}
 }
 
@@ -55,6 +59,17 @@ void Container::set_hovered() {
 	} else {
 		this->hovered = false;
 	}
+}
+
+bool Container::am_i_child_of_this(Container *cont) {
+	YGNodeRef parent = YGNodeGetParent(this->node);
+	while (parent != nullptr) {
+		if (cont->node == parent) {
+			return true;
+		}
+		parent = YGNodeGetParent(parent);
+	}
+	return false;
 }
 
 void Container::set_screen_pos() {

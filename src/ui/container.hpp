@@ -22,6 +22,7 @@ public:
 	const std::vector<Container *> get_children();
 
 	void set_hovered();
+	bool am_i_child_of_this(Container *cont);
 
 	void set_screen_pos();
 

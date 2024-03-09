@@ -35,7 +35,7 @@ struct AllContainers {
 
 struct UI {
 	AllContainers containers;
-	bool modal_mode;
+	std::vector<Modal *> active_modals;
 
 	static UI &get();
 	~UI();

@@ -34,6 +34,7 @@ void Button::step() {
 		// Left click
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
 			this->on_click();
+			SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 		}
 	}
 

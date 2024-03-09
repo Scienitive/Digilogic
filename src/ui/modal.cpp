@@ -50,12 +50,12 @@ void Modal::late_step() {
 
 void Modal::activate() {
 	this->active = true;
-	UI::get().modal_mode = true;
+	UI::get().active_modals.push_back(this);
 }
 
 void Modal::deactivate() {
 	this->active = false;
-	UI::get().modal_mode = false;
+	UI::get().active_modals.pop_back();
 }
 
 bool Modal::is_active() {
