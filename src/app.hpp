@@ -3,8 +3,16 @@
 
 #include "ui/ui.hpp"
 
+struct State {
+	State();
+	~State();
+
+	void step();
+};
+
 struct App {
 	UI &ui;
+	State states;
 
 	static App &get();
 	~App();

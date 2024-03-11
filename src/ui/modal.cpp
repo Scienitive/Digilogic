@@ -27,7 +27,6 @@ void Modal::calculate_layout() {
 
 	float height = YGNodeLayoutGetHeight(this->node);
 	float width = this->aspect_ratio * height;
-	std::cout << height << std::endl;
 
 	// Position setting
 	YGNodeStyleSetPosition(this->node, YGEdgeLeft, (GetScreenWidth() / 2.0) - (width / 2.0));

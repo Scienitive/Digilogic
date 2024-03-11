@@ -4,6 +4,7 @@
 #include "ui.hpp"
 #include "yoga/YGNodeStyle.h"
 #include <functional>
+#include <iostream>
 #include <yoga/Yoga.h>
 
 Button::Button(std::string text) : on_click([]() {}), old_hovered(false) {
@@ -21,20 +22,17 @@ void Button::step() {
 	Container::step();
 
 	// The first time the cursor enters or leaves
-	if (this->hovered != this->old_hovered) {
-		if (this->hovered) {
-			SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
-		} else {
-			SetMouseCursor(MOUSE_CURSOR_DEFAULT);
-		}
-	}
+	/* if (this->hovered != this->old_hovered) { */
+	/* 	if (this->hovered) { */
+	/* 	} */
+	/* } */
 
 	// Continously checking if the cursor is in the container
 	if (this->hovered) {
+		SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
 		// Left click
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
 			this->on_click();
-			SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 		}
 	}
 

@@ -1,5 +1,14 @@
 #include "app.hpp"
+#include "raylib.h"
 #include "ui/ui.hpp"
+
+State::State() {}
+
+State::~State() {}
+
+void State::step() {
+	SetMouseCursor(MOUSE_CURSOR_DEFAULT);
+}
 
 App::App() : ui(UI::get()) {}
 
@@ -11,6 +20,7 @@ App &App::get() {
 }
 
 void App::step() {
+	this->states.step();
 	this->ui.step();
 }
 

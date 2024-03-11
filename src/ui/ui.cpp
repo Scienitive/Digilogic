@@ -114,8 +114,29 @@ void UI::set_all_containers() {
 
 void UI::set_all_modals() {
 	Modal *exit_modal = new Modal();
-	exit_modal->color = RED;
-	exit_modal->set_size(16.0 / 9.0, 20, 300);
+	exit_modal->color = {53, 51, 51, 255};
+	exit_modal->set_size(16.0 / 9.0, 25, 225);
+	YGNodeStyleSetFlexDirection(exit_modal->node, YGFlexDirectionColumn);
+
+	Container *exit_modal_top = new Container();
+	Container *exit_modal_bot = new Container();
+	Button *yes_button = new Button("YES");
+	Button *no_button = new Button("NO");
+
+	yes_button->color = GREEN;
+	no_button->color = RED;
+
+	YGNodeStyleSetWidthPercent(exit_modal_top->node, 100);
+	YGNodeStyleSetHeightPercent(exit_modal_top->node, 50);
+	YGNodeStyleSetWidthPercent(exit_modal_bot->node, 100);
+	YGNodeStyleSetHeightPercent(exit_modal_bot->node, 50);
+	YGNodeStyleSetJustifyContent(exit_modal_bot->node, YGJustifyCenter);
+	YGNodeStyleSetFlexDirection(exit_modal_bot->node, YGFlexDirectionRow);
+	exit_modal_bot->add_child(yes_button);
+	exit_modal_bot->add_child(no_button);
+
+	exit_modal->add_child(exit_modal_top);
+	exit_modal->add_child(exit_modal_bot);
 	this->containers.main->add_child(exit_modal);
 	this->containers.exit_modal = exit_modal;
 }

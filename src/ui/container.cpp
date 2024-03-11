@@ -4,6 +4,7 @@
 #include "ui.hpp"
 #include "yoga/YGNode.h"
 #include "yoga/YGNodeLayout.h"
+#include <iostream>
 
 Container::Container() : color(BLANK) {
 	this->node = YGNodeNew();
@@ -17,8 +18,9 @@ Container::~Container() {
 
 void Container::step() {
 	UI &ui = UI::get();
-	if (this == ui.containers.main || ui.active_modals.size() <= 0 ||
-		(this->am_i_child_of_this(ui.active_modals[ui.active_modals.size() - 1]))) {
+	size_t active_modal_count = ui.active_modals.size();
+	if (this == ui.containers.main || active_modal_count <= 0 || this == ui.active_modals[active_modal_count - 1] ||
+		(this->am_i_child_of_this(ui.active_modals[active_modal_count - 1]))) {
 		this->set_hovered();
 
 		for (Container *cont : this->children) {
