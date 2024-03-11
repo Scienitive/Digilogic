@@ -146,8 +146,14 @@ void UI::set_all_modals() {
 	no_button->color = RED;
 	yes_button->color = GREEN;
 	exit_modal_text->text_color = WHITE;
-	no_button->set_on_click([this]() { this->default_close_modal_func(); });
-	yes_button->set_on_click([]() { App::get().states.exit = true; });
+	no_button->set_on_click([this]() {
+		Modal *modal = this->get_front_modal();
+		modal->deactivate();
+	});
+	yes_button->set_on_click([]() {
+		App &app = App::get();
+		app.states.exit = true;
+	});
 
 	// Exit Modal Top
 	YGNodeStyleSetHeightPercent(exit_modal_text->node, 50);
@@ -250,12 +256,10 @@ void UI::set_mid_container() {
 	this->containers.mid = mid;
 }
 
-void UI::default_close_modal_func() {
-	size_t active_modals_size = this->active_modals.size();
-	if (active_modals_size <= 0) {
-		return;
+Modal *UI::get_front_modal() {
+	if (this->active_modals.empty()) {
+		return nullptr;
+	} else {
+		return this->active_modals.back();
 	}
-
-	Modal *modal = this->active_modals[active_modals_size - 1];
-	modal->deactivate();
 }

@@ -53,14 +53,14 @@ private:
 
 	template <typename T> void apply_func_to_all(Container *cont, std::function<void(T *)> func);
 
-	void default_close_modal_func();
-
 public:
 	void calculate_layout();
 
 	void step();
 	void draw();
 	void late_step();
+
+	Modal *get_front_modal();
 };
 
 #endif
