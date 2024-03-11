@@ -8,6 +8,7 @@ int main() {
 	const int SCREEN_WIDTH = 800;
 	const int SCREEN_HEIGHT = 450;
 	SetTargetFPS(60);
+	SetExitKey(0);
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "DigiLogic");
 	SetWindowMinSize(800, 450);
@@ -26,6 +27,10 @@ int main() {
 
 		// Late Step
 		app.late_step();
+
+		if (app.states.exit) {
+			break;
+		}
 	}
 
 	return 0;

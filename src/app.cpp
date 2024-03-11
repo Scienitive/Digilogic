@@ -2,7 +2,7 @@
 #include "raylib.h"
 #include "ui/ui.hpp"
 
-State::State() {}
+State::State() : exit(false) {}
 
 State::~State() {}
 

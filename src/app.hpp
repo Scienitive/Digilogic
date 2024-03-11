@@ -4,6 +4,8 @@
 #include "ui/ui.hpp"
 
 struct State {
+	bool exit;
+
 	State();
 	~State();
 

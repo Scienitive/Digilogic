@@ -20,6 +20,8 @@ struct TextLabel : public Container {
 
 	void draw() override;
 	float set_size_from_height(float height);
+	void set_font_size();
+	void set_font_size(float height);
 	Font get_font();
 };
 

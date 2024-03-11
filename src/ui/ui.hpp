@@ -51,8 +51,9 @@ private:
 	void set_mid_container();
 	void set_bot_container(Color color, float height_perc, float height_min, float height_max);
 
-	void apply_func_to_all_buttons(Container *cont, std::function<void(Button *)> func);
-	void apply_func_to_all_modals(Container *cont, std::function<void(Modal *)> func);
+	template <typename T> void apply_func_to_all(Container *cont, std::function<void(T *)> func);
+
+	void default_close_modal_func();
 
 public:
 	void calculate_layout();

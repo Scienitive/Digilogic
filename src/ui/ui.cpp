@@ -1,7 +1,13 @@
 #include "ui.hpp"
+#include "../app.hpp"
 #include "button.hpp"
 #include "container.hpp"
+#include "textlabel.hpp"
+#include "yoga/YGNode.h"
 #include "yoga/YGNodeLayout.h"
+#include <cstddef>
+#include <functional>
+#include <iostream>
 #include <raylib.h>
 #include <yoga/YGNodeStyle.h>
 #include <yoga/Yoga.h>
@@ -17,6 +23,9 @@ UI::UI() {
 
 	// Run initial UI functions
 	this->set_all_containers();
+	this->calculate_layout();
+	// BUG When you do calculate_layout() just once somethings gets calculated wrongly (if you do it second time it's
+	// ok) So this is a temporary fix
 	this->calculate_layout();
 }
 
@@ -55,24 +64,13 @@ void UI::late_step() {
 	this->containers.main->late_step();
 }
 
-void UI::apply_func_to_all_buttons(Container *cont, std::function<void(Button *)> func) {
-	Button *possible_button = dynamic_cast<Button *>(cont);
+template <typename T> void UI::apply_func_to_all(Container *cont, std::function<void(T *)> func) {
+	T *possible_button = dynamic_cast<T *>(cont);
 	if (possible_button != nullptr) {
 		func(possible_button);
 	} else {
 		for (Container *c : cont->get_children()) {
-			apply_func_to_all_buttons(c, func);
-		}
-	}
-}
-
-void UI::apply_func_to_all_modals(Container *cont, std::function<void(Modal *)> func) {
-	Modal *possible_modal = dynamic_cast<Modal *>(cont);
-	if (possible_modal != nullptr) {
-		func(possible_modal);
-	} else {
-		for (Container *c : cont->get_children()) {
-			apply_func_to_all_modals(c, func);
+			apply_func_to_all<T>(c, func);
 		}
 	}
 }
@@ -81,7 +79,7 @@ void UI::calculate_layout() {
 	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
 
 	// Set all button widths
-	this->apply_func_to_all_buttons(this->containers.main, [](Button *button) {
+	this->apply_func_to_all<Button>(this->containers.main, [](Button *button) {
 		float padding_top = YGNodeLayoutGetPadding(button->node, YGEdgeTop);
 		float padding_bot = YGNodeLayoutGetPadding(button->node, YGEdgeBottom);
 		float padding_left = YGNodeLayoutGetPadding(button->node, YGEdgeLeft);
@@ -91,7 +89,7 @@ void UI::calculate_layout() {
 		float width = button->text_label->set_size_from_height(height) + (padding_left + padding_right);
 		button->width = width;
 	});
-	this->apply_func_to_all_buttons(this->containers.main, [](Button *button) {
+	this->apply_func_to_all<Button>(this->containers.main, [](Button *button) {
 		for (Button *linked : button->width_linked_buttons) {
 			if (linked->width > button->width) {
 				button->width = linked->width;
@@ -101,7 +99,10 @@ void UI::calculate_layout() {
 	});
 
 	// Set all modal width, height and positions
-	this->apply_func_to_all_modals(this->containers.main, [](Modal *modal) { modal->calculate_layout(); });
+	this->apply_func_to_all<Modal>(this->containers.main, [](Modal *modal) { modal->calculate_layout(); });
+
+	this->apply_func_to_all<TextLabel>(this->containers.main,
+									   [](TextLabel *text_label) { text_label->set_font_size(); });
 
 	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
 }
@@ -130,21 +131,34 @@ void UI::set_all_modals() {
 	Container *exit_modal_bot = new Container();
 	Button *no_button = new Button("NO");
 	Button *yes_button = new Button("YES");
-	no_button->width_link_button(yes_button);
+	TextLabel *exit_modal_text = new TextLabel("Are you sure?");
 
-	no_button->color = RED;
-	yes_button->color = GREEN;
-
-	YGNodeStyleSetWidthPercent(exit_modal_top->node, 100);
-	YGNodeStyleSetHeightPercent(exit_modal_top->node, 50);
+	// Exit Modal Bot
 	YGNodeStyleSetWidthPercent(exit_modal_bot->node, 100);
 	YGNodeStyleSetHeightPercent(exit_modal_bot->node, 50);
-	YGNodeStyleSetJustifyContent(exit_modal_bot->node, YGJustifyCenter);
+	YGNodeStyleSetJustifyContent(exit_modal_bot->node, YGJustifySpaceEvenly);
 	YGNodeStyleSetFlexDirection(exit_modal_bot->node, YGFlexDirectionRow);
+	YGNodeStyleSetPaddingPercent(exit_modal_bot->node, YGEdgeAll, 7.5);
 	exit_modal_bot->add_child(no_button);
 	exit_modal_bot->add_child(yes_button);
 
-	YGNodeStyleSetPaddingPercent(exit_modal_bot->node, YGEdgeAll, 7.5);
+	no_button->width_link_button(yes_button);
+	no_button->color = RED;
+	yes_button->color = GREEN;
+	exit_modal_text->text_color = WHITE;
+	no_button->set_on_click([this]() { this->default_close_modal_func(); });
+	yes_button->set_on_click([]() { App::get().states.exit = true; });
+
+	// Exit Modal Top
+	YGNodeStyleSetHeightPercent(exit_modal_text->node, 50);
+
+	YGNodeStyleSetJustifyContent(exit_modal_top->node, YGJustifyCenter);
+	YGNodeStyleSetAlignItems(exit_modal_top->node, YGAlignCenter);
+	YGNodeStyleSetWidthPercent(exit_modal_top->node, 100);
+	YGNodeStyleSetHeightPercent(exit_modal_top->node, 50);
+	exit_modal_top->add_child(exit_modal_text);
+
+	// Exit Modal
 	exit_modal->add_child(exit_modal_top);
 	exit_modal->add_child(exit_modal_bot);
 	this->containers.main->add_child(exit_modal);
@@ -234,4 +248,14 @@ void UI::set_mid_container() {
 	YGNodeStyleSetFlexGrow(mid->node, 1);
 	this->containers.main->add_child(mid);
 	this->containers.mid = mid;
+}
+
+void UI::default_close_modal_func() {
+	size_t active_modals_size = this->active_modals.size();
+	if (active_modals_size <= 0) {
+		return;
+	}
+
+	Modal *modal = this->active_modals[active_modals_size - 1];
+	modal->deactivate();
 }
