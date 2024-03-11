@@ -3,15 +3,20 @@
 #include "textlabel.hpp"
 #include "ui.hpp"
 #include "yoga/YGNodeStyle.h"
+#include <algorithm>
 #include <functional>
 #include <iostream>
 #include <yoga/Yoga.h>
 
-Button::Button(std::string text) : on_click([]() {}), old_hovered(false) {
+Button::Button(std::string text) : width(0), on_click([]() {}), old_hovered(false) {
 	this->text_label = new TextLabel(text);
 	YGNodeStyleSetPaddingPercent(this->node, YGEdgeAll, 2);
 	YGNodeStyleSetHeightPercent(this->node, 100);
 	YGNodeInsertChild(this->node, this->text_label->node, 0);
+
+	// Center the textlabel and potentially other elements inside the button
+	YGNodeStyleSetAlignItems(this->node, YGAlignCenter);
+	YGNodeStyleSetJustifyContent(this->node, YGJustifyCenter);
 }
 
 Button::~Button() {
@@ -61,4 +66,13 @@ void Button::late_step() {
 
 void Button::set_on_click(std::function<void()> func) {
 	this->on_click = func;
+}
+
+// This could be better if you use set or unordered_set
+void Button::width_link_button(Button *other) {
+	if (std::find(this->width_linked_buttons.begin(), this->width_linked_buttons.end(), other) ==
+		this->width_linked_buttons.end()) {
+		this->width_linked_buttons.push_back(other);
+		other->width_linked_buttons.push_back(this);
+	}
 }

@@ -89,7 +89,15 @@ void UI::calculate_layout() {
 
 		float height = YGNodeLayoutGetHeight(button->node) - (padding_top + padding_bot);
 		float width = button->text_label->set_size_from_height(height) + (padding_left + padding_right);
-		YGNodeStyleSetWidth(button->node, width);
+		button->width = width;
+	});
+	this->apply_func_to_all_buttons(this->containers.main, [](Button *button) {
+		for (Button *linked : button->width_linked_buttons) {
+			if (linked->width > button->width) {
+				button->width = linked->width;
+			}
+		}
+		YGNodeStyleSetWidth(button->node, button->width);
 	});
 
 	// Set all modal width, height and positions
@@ -120,11 +128,12 @@ void UI::set_all_modals() {
 
 	Container *exit_modal_top = new Container();
 	Container *exit_modal_bot = new Container();
-	Button *yes_button = new Button("YES");
 	Button *no_button = new Button("NO");
+	Button *yes_button = new Button("YES");
+	no_button->width_link_button(yes_button);
 
-	yes_button->color = GREEN;
 	no_button->color = RED;
+	yes_button->color = GREEN;
 
 	YGNodeStyleSetWidthPercent(exit_modal_top->node, 100);
 	YGNodeStyleSetHeightPercent(exit_modal_top->node, 50);
@@ -132,9 +141,10 @@ void UI::set_all_modals() {
 	YGNodeStyleSetHeightPercent(exit_modal_bot->node, 50);
 	YGNodeStyleSetJustifyContent(exit_modal_bot->node, YGJustifyCenter);
 	YGNodeStyleSetFlexDirection(exit_modal_bot->node, YGFlexDirectionRow);
-	exit_modal_bot->add_child(yes_button);
 	exit_modal_bot->add_child(no_button);
+	exit_modal_bot->add_child(yes_button);
 
+	YGNodeStyleSetPaddingPercent(exit_modal_bot->node, YGEdgeAll, 7.5);
 	exit_modal->add_child(exit_modal_top);
 	exit_modal->add_child(exit_modal_bot);
 	this->containers.main->add_child(exit_modal);
