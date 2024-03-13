@@ -51,7 +51,8 @@ private:
 	void set_mid_container();
 	void set_bot_container(Color color, float height_perc, float height_min, float height_max);
 
-	template <typename T> void apply_func_to_all(Container *cont, std::function<void(T *)> func);
+	template <typename T>
+	void apply_func_to_all(Container *cont, std::function<void(T *)> func);
 
 public:
 	void calculate_layout();

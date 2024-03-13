@@ -64,7 +64,8 @@ void UI::late_step() {
 	this->containers.main->late_step();
 }
 
-template <typename T> void UI::apply_func_to_all(Container *cont, std::function<void(T *)> func) {
+template <typename T>
+void UI::apply_func_to_all(Container *cont, std::function<void(T *)> func) {
 	T *possible_button = dynamic_cast<T *>(cont);
 	if (possible_button != nullptr) {
 		func(possible_button);
@@ -94,8 +95,11 @@ void UI::calculate_layout() {
 			if (linked->width > button->width) {
 				button->width = linked->width;
 			}
+			if (linked->width_multiplier > button->width_multiplier) {
+				button->width_multiplier = linked->width_multiplier;
+			}
 		}
-		YGNodeStyleSetWidth(button->node, button->width);
+		YGNodeStyleSetWidth(button->node, button->width * button->width_multiplier);
 	});
 
 	// Set all modal width, height and positions
@@ -143,17 +147,20 @@ void UI::set_all_modals() {
 	exit_modal_bot->add_child(yes_button);
 
 	no_button->width_link_button(yes_button);
+	no_button->width_multiplier = 2;
 	no_button->color = RED;
-	yes_button->color = GREEN;
-	exit_modal_text->text_color = WHITE;
 	no_button->set_on_click([this]() {
 		Modal *modal = this->get_front_modal();
 		modal->deactivate();
 	});
+
+	yes_button->color = GREEN;
 	yes_button->set_on_click([]() {
 		App &app = App::get();
 		app.states.exit = true;
 	});
+
+	exit_modal_text->text_color = WHITE;
 
 	// Exit Modal Top
 	YGNodeStyleSetHeightPercent(exit_modal_text->node, 50);

@@ -10,6 +10,7 @@ struct Button : public Container {
 	TextLabel *text_label;
 
 	float width;
+	float width_multiplier;
 	std::vector<Button *> width_linked_buttons;
 
 	Button(std::string text);

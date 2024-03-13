@@ -8,7 +8,7 @@
 #include <iostream>
 #include <yoga/Yoga.h>
 
-Button::Button(std::string text) : width(0), on_click([]() {}), old_hovered(false) {
+Button::Button(std::string text) : width(0), width_multiplier(1), on_click([]() {}), old_hovered(false) {
 	this->text_label = new TextLabel(text);
 	YGNodeStyleSetPaddingPercent(this->node, YGEdgeAll, 2);
 	YGNodeStyleSetHeightPercent(this->node, 100);

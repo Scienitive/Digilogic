@@ -5,3 +5,4 @@ TabWidth: 4
 ColumnLimit: 120
 AllowShortFunctionsOnASingleLine: Empty
 AccessModifierOffset: -4
+AlwaysBreakTemplateDeclarations: Yes
