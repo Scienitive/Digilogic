@@ -8,6 +8,20 @@ Component::Component(std::string name, size_t input_count, size_t output_count, 
 	: name(name), input_count(input_count), output_count(output_count),
 	  truth_table(new TruthTableNode(input_count, outputs)) {}
 
+Component::Component(const Component &other) {
+	*this = other;
+}
+
+Component &Component::operator=(const Component &other) {
+	this->name = other.name;
+	this->input_count = other.input_count;
+	this->output_count = other.output_count;
+
+	std::vector<std::vector<State>> outputs = other.truth_table->get_outputs();
+	this->truth_table = new TruthTableNode(this->input_count, outputs);
+	return *this;
+}
+
 Component::~Component() {
 	if (this->truth_table != nullptr) {
 		delete this->truth_table;

@@ -30,7 +30,8 @@ TruthTableNode::TruthTableNode(size_t depth, std::vector<std::vector<State>> &ou
 			exit(1);
 		}
 		this->outputs = new std::vector<State>(outputs[0]);
-		outputs.erase(outputs.begin()); // BU KISMA BI BAK BU COK SACMA BI DIZAYN
+		/* outputs.erase(outputs.begin()); // BU KISMA BI BAK BU COK SACMA BI DIZAYN (SIMDILIK DEVRE DISI AMA PROBLEM
+		 * OLURSA BAK BURAYA) */
 	}
 }
 

@@ -1,21 +1,27 @@
 #ifndef APP_HPP
 #define APP_HPP
 
+#include "component/componentgroup.hpp"
 #include "ui/ui.hpp"
+#include <vector>
 
-struct State {
+struct AppState {
 	bool exit;
 
-	State();
-	~State();
+	AppState();
+	~AppState();
 
 	void step();
 };
 
 struct App {
 	UI &ui;
-	State states;
+	AppState states;
 
+private:
+	std::vector<ComponentGroup> comp_groups;
+
+public:
 	static App &get();
 	~App();
 	App(const App &other) = delete;
@@ -27,6 +33,8 @@ struct App {
 
 private:
 	App();
+
+	void set_comp_groups();
 };
 
 #endif
