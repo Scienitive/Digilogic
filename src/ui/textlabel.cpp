@@ -23,21 +23,11 @@ void TextLabel::draw() {
 	DrawTextEx(this->get_font(), this->text.c_str(), this->pos, this->font_size, this->spacing, this->text_color);
 }
 
-// For button->text_labels generally
-float TextLabel::set_size_from_height(float height) {
-	this->set_font_size(height);
-
-	Vector2 measure = MeasureTextEx(this->get_font(), this->text.c_str(), this->font_size, this->spacing);
-	YGNodeStyleSetHeight(this->node, measure.y);
-	YGNodeStyleSetWidth(this->node, measure.x);
-	return measure.x;
-}
-
-// It calculates from height of the TextLabel container
-void TextLabel::set_font_size() {
+// It set's font_size and width of the text_label and then returns the width
+float TextLabel::set_font_size() {
 	float height = YGNodeLayoutGetHeight(this->node);
-	Vector2 measure_12 = MeasureTextEx(this->get_font(), this->text.c_str(), 12, this->spacing);
-	Vector2 measure_13 = MeasureTextEx(this->get_font(), this->text.c_str(), 13, this->spacing);
+	Vector2 measure_12 = MeasureTextEx(this->get_font(12), this->text.c_str(), 12, this->spacing);
+	Vector2 measure_13 = MeasureTextEx(this->get_font(13), this->text.c_str(), 13, this->spacing);
 
 	float diff = measure_13.y - measure_12.y;
 	float diff_multiplier = (height - measure_12.y) / diff;
@@ -46,17 +36,13 @@ void TextLabel::set_font_size() {
 	// Also set width
 	Vector2 measure = MeasureTextEx(this->get_font(), this->text.c_str(), this->font_size, this->spacing);
 	YGNodeStyleSetWidth(this->node, measure.x);
-}
-
-void TextLabel::set_font_size(float height) {
-	Vector2 measure_12 = MeasureTextEx(this->get_font(), this->text.c_str(), 12, this->spacing);
-	Vector2 measure_13 = MeasureTextEx(this->get_font(), this->text.c_str(), 13, this->spacing);
-
-	float diff = measure_13.y - measure_12.y;
-	float diff_multiplier = (height - measure_12.y) / diff;
-	this->font_size = measure_12.y + (diff_multiplier * diff);
+	return measure.x;
 }
 
 Font TextLabel::get_font() {
 	return this->font->get_font(this->font_name, this->font_size);
+}
+
+Font TextLabel::get_font(float font_size) {
+	return this->font->get_font(this->font_name, font_size);
 }

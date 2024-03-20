@@ -2,7 +2,6 @@
 #define APP_HPP
 
 #include "component/componentgroup.hpp"
-#include "ui/ui.hpp"
 #include <vector>
 
 struct AppState {
@@ -15,7 +14,6 @@ struct AppState {
 };
 
 struct App {
-	UI &ui;
 	AppState states;
 
 private:
@@ -30,6 +28,8 @@ public:
 	void step();
 	void draw();
 	void late_step();
+
+	const std::vector<ComponentGroup> get_comp_groups();
 
 private:
 	App();

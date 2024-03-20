@@ -11,19 +11,20 @@ enum State {
 	HIGH_Z,
 };
 std::ostream &operator<<(std::ostream &os, const State &state);
+typedef std::vector<std::vector<State>> LogicTable;
 
 struct TruthTableNode {
 	TruthTableNode *left;
 	TruthTableNode *right;
 	std::vector<State> *outputs;
 
-	TruthTableNode(size_t depth, std::vector<std::vector<State>> &outputs);
+	TruthTableNode(size_t depth, LogicTable &outputs);
 	~TruthTableNode();
 
-	std::vector<std::vector<State>> get_outputs();
+	LogicTable get_outputs();
 
 private:
-	void get_outputs_helper(std::vector<std::vector<State>> &outputs);
+	void get_outputs_helper(LogicTable &outputs);
 };
 
 #endif

@@ -11,6 +11,19 @@ struct Container {
 	Vector2 pos;
 	bool hovered;
 
+	float border_top;
+	float border_bottom;
+	float border_left;
+	float border_right;
+	float border_top_max;
+	float border_top_min;
+	float border_bottom_max;
+	float border_bottom_min;
+	float border_left_max;
+	float border_left_min;
+	float border_right_max;
+	float border_right_min;
+
 private:
 	std::vector<Container *> children;
 
@@ -25,6 +38,11 @@ public:
 	bool am_i_child_of_this(Container *cont);
 
 	void set_screen_pos();
+
+	// This is something I implemented because there is no YGNodeStyleSetBorderPercent
+	void set_border_percent(YGEdge edge, float value);
+	void set_border_max_px(YGEdge edge, float value);
+	void set_border_min_px(YGEdge edge, float value);
 
 	virtual void step();
 	virtual void draw();

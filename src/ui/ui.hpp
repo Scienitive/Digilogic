@@ -51,8 +51,11 @@ private:
 	void set_mid_container();
 	void set_bot_container(Color color, float height_perc, float height_min, float height_max);
 
+	// if continue_nested == false: it wont search for another <T> under a <T> after finding one
 	template <typename T>
-	void apply_func_to_all(Container *cont, std::function<void(T *)> func);
+	void apply_func_to_all(Container *cont, bool continue_nested, std::function<void(T *)> func);
+
+	void debug_containers();
 
 public:
 	void calculate_layout();

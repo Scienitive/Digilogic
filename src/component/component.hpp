@@ -15,7 +15,7 @@ class Component {
 	TruthTableNode *truth_table;
 
 public:
-	Component(std::string name, size_t input_count, size_t output_count, std::vector<std::vector<State>> outputs);
+	Component(std::string name, size_t input_count, size_t output_count, LogicTable outputs);
 	Component(const Component &other);
 	Component &operator=(const Component &other);
 	~Component();

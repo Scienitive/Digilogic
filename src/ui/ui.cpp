@@ -3,12 +3,15 @@
 #include "button.hpp"
 #include "container.hpp"
 #include "textlabel.hpp"
+#include "yoga/YGConfig.h"
 #include "yoga/YGNode.h"
 #include "yoga/YGNodeLayout.h"
 #include <cstddef>
+#include <fstream>
 #include <functional>
 #include <iostream>
 #include <raylib.h>
+#include <vector>
 #include <yoga/YGNodeStyle.h>
 #include <yoga/Yoga.h>
 
@@ -65,13 +68,14 @@ void UI::late_step() {
 }
 
 template <typename T>
-void UI::apply_func_to_all(Container *cont, std::function<void(T *)> func) {
-	T *possible_button = dynamic_cast<T *>(cont);
-	if (possible_button != nullptr) {
-		func(possible_button);
-	} else {
+void UI::apply_func_to_all(Container *cont, bool continue_nested, std::function<void(T *)> func) {
+	T *possible_type = dynamic_cast<T *>(cont);
+	if (possible_type != nullptr) {
+		func(possible_type);
+	}
+	if (continue_nested || possible_type == nullptr) {
 		for (Container *c : cont->get_children()) {
-			apply_func_to_all<T>(c, func);
+			apply_func_to_all<T>(c, continue_nested, func);
 		}
 	}
 }
@@ -79,18 +83,89 @@ void UI::apply_func_to_all(Container *cont, std::function<void(T *)> func) {
 void UI::calculate_layout() {
 	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
 
-	// Set all button widths
-	this->apply_func_to_all<Button>(this->containers.main, [](Button *button) {
-		float padding_top = YGNodeLayoutGetPadding(button->node, YGEdgeTop);
-		float padding_bot = YGNodeLayoutGetPadding(button->node, YGEdgeBottom);
-		float padding_left = YGNodeLayoutGetPadding(button->node, YGEdgeLeft);
-		float padding_right = YGNodeLayoutGetPadding(button->node, YGEdgeRight);
+	// Set all border percentage values
+	this->apply_func_to_all<Container>(this->containers.main, true, [](Container *cont) {
+		float width = YGNodeLayoutGetWidth(cont->node);
+		float height = YGNodeLayoutGetHeight(cont->node);
 
-		float height = YGNodeLayoutGetHeight(button->node) - (padding_top + padding_bot);
-		float width = button->text_label->set_size_from_height(height) + (padding_left + padding_right);
-		button->width = width;
+		float border_top = height / 100 * cont->border_top;
+		if (cont->border_top_max >= 0 && border_top > cont->border_top_max) {
+			border_top = cont->border_top_max;
+		} else if (cont->border_top_min >= 0 && border_top < cont->border_top_min) {
+			border_top = cont->border_top_min;
+		}
+
+		float border_bottom = height / 100 * cont->border_bottom;
+		if (cont->border_bottom_max >= 0 && border_bottom > cont->border_bottom_max) {
+			border_bottom = cont->border_bottom_max;
+		} else if (cont->border_bottom_min >= 0 && border_bottom < cont->border_bottom_min) {
+			border_bottom = cont->border_bottom_min;
+		}
+
+		float border_left = width / 100 * cont->border_left;
+		if (cont->border_left_max >= 0 && border_left > cont->border_left_max) {
+			border_left = cont->border_left_max;
+		} else if (cont->border_left_min >= 0 && border_left < cont->border_left_min) {
+			border_left = cont->border_left_min;
+		}
+
+		float border_right = width / 100 * cont->border_right;
+		if (cont->border_right_max >= 0 && border_right > cont->border_right_max) {
+			border_right = cont->border_right_max;
+		} else if (cont->border_right_min >= 0 && border_right < cont->border_right_min) {
+			border_right = cont->border_right_min;
+		}
+
+		if (cont->border_top >= 0) {
+			YGNodeStyleSetBorder(cont->node, YGEdgeTop, border_top);
+		}
+		if (cont->border_bottom >= 0) {
+			YGNodeStyleSetBorder(cont->node, YGEdgeBottom, border_bottom);
+		}
+		if (cont->border_left >= 0) {
+			YGNodeStyleSetBorder(cont->node, YGEdgeLeft, border_left);
+		}
+		if (cont->border_right >= 0) {
+			YGNodeStyleSetBorder(cont->node, YGEdgeRight, border_right);
+		}
 	});
-	this->apply_func_to_all<Button>(this->containers.main, [](Button *button) {
+
+	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
+
+	// Set all button widths
+	this->apply_func_to_all<Button>(this->containers.main, false, [](Button *button) {
+		float text_width = button->text_label->set_font_size();
+
+		// Recalculate borders for left and right because width was 0
+		float border_left;
+		float border_right;
+		if (button->border_left < 0) {
+			border_left = YGNodeLayoutGetBorder(button->node, YGEdgeLeft);
+		} else {
+			border_left = text_width / 100 * button->border_left;
+			if (button->border_left_max >= 0 && border_left > button->border_left_max) {
+				border_left = button->border_left_max;
+			} else if (button->border_left_min >= 0 && border_left < button->border_left_min) {
+				border_left = button->border_left_min;
+			}
+			YGNodeStyleSetBorder(button->node, YGEdgeLeft, border_left);
+		}
+		if (button->border_right < 0) {
+			border_right = YGNodeLayoutGetBorder(button->node, YGEdgeRight);
+		} else {
+			border_right = text_width / 100 * button->border_right;
+			if (button->border_right_max >= 0 && border_right > button->border_right_max) {
+				border_right = button->border_right_max;
+			} else if (button->border_right_min >= 0 && border_right < button->border_right_min) {
+				border_right = button->border_right_min;
+			}
+			YGNodeStyleSetBorder(button->node, YGEdgeRight, border_right);
+		}
+
+		button->width = text_width + border_left + border_right;
+		YGNodeStyleSetWidth(button->node, button->width);
+	});
+	this->apply_func_to_all<Button>(this->containers.main, false, [](Button *button) {
 		for (Button *linked : button->width_linked_buttons) {
 			if (linked->width > button->width) {
 				button->width = linked->width;
@@ -103,12 +178,78 @@ void UI::calculate_layout() {
 	});
 
 	// Set all modal width, height and positions
-	this->apply_func_to_all<Modal>(this->containers.main, [](Modal *modal) { modal->calculate_layout(); });
+	this->apply_func_to_all<Modal>(this->containers.main, false, [](Modal *modal) { modal->calculate_layout(); });
 
-	this->apply_func_to_all<TextLabel>(this->containers.main,
+	// TODO You can optimise this by only going through TextLabel's that don't belong to a button (because
+	// button->textlabels are handled on button part of this function).
+	this->apply_func_to_all<TextLabel>(this->containers.main, false,
 									   [](TextLabel *text_label) { text_label->set_font_size(); });
 
 	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
+	this->debug_containers();
+}
+
+void debug_containers_recursive(std::ofstream &file, Container *cont) {
+	Button *button = dynamic_cast<Button *>(cont);
+	TextLabel *text_label = dynamic_cast<TextLabel *>(cont);
+	Modal *modal = dynamic_cast<Modal *>(cont);
+
+	file << "type: ";
+	if (button != nullptr) {
+		file << "Button\n";
+		file << "info: " << button->text_label->text << "\n";
+	} else if (text_label != nullptr) {
+		file << "TextLabel\n";
+		file << "info: " << text_label->text << "\n";
+	} else if (modal != nullptr) {
+		file << "Modal\n";
+	} else {
+		file << "Container\n";
+	}
+
+	file << "given width: " << YGNodeStyleGetWidth(cont->node).value;
+	if (YGNodeStyleGetWidth(cont->node).unit == 2) {
+		file << "%\n";
+	} else {
+		file << "px\n";
+	}
+	file << "calculated width: " << YGNodeLayoutGetWidth(cont->node) << "\n";
+	file << "given height: " << YGNodeStyleGetHeight(cont->node).value;
+	if (YGNodeStyleGetHeight(cont->node).unit == 2) {
+		file << "%\n";
+	} else {
+		file << "px\n";
+	}
+	file << "calculated height: " << YGNodeLayoutGetHeight(cont->node) << "\n";
+	file << "given padding all: " << YGNodeStyleGetPadding(cont->node, YGEdgeAll).value;
+	if (YGNodeStyleGetPadding(cont->node, YGEdgeAll).unit == 2) {
+		file << "%\n";
+	} else {
+		file << "px\n";
+	}
+	file << "given padding top: " << YGNodeStyleGetPadding(cont->node, YGEdgeTop).value;
+	if (YGNodeStyleGetPadding(cont->node, YGEdgeTop).unit == 2) {
+		file << "%\n";
+	} else {
+		file << "px\n";
+	}
+	file << "calculated padding top: " << YGNodeLayoutGetPadding(cont->node, YGEdgeTop) << "\n";
+	file << "calculated padding bottom: " << YGNodeLayoutGetPadding(cont->node, YGEdgeBottom) << "\n";
+	file << "calculated padding left: " << YGNodeLayoutGetPadding(cont->node, YGEdgeLeft) << "\n";
+	file << "calculated padding right: " << YGNodeLayoutGetPadding(cont->node, YGEdgeRight) << "\n";
+	file << "\n";
+
+	for (Container *child : cont->get_children()) {
+		debug_containers_recursive(file, child);
+	}
+}
+
+void UI::debug_containers() {
+	std::ofstream file("logs", std::ofstream::trunc);
+	if (file.is_open()) {
+		debug_containers_recursive(file, this->containers.main);
+		file.close();
+	}
 }
 
 void UI::set_all_containers() {
@@ -186,6 +327,10 @@ void UI::set_top_container(Color color, float height_perc, float height_min, flo
 	YGNodeStyleSetMinHeight(top->node, height_min);
 	YGNodeStyleSetMaxHeight(top->node, height_max);
 	YGNodeStyleSetFlexDirection(top->node, YGFlexDirectionRow);
+	YGNodeStyleSetPadding(top->node, YGEdgeTop, 8);
+	YGNodeStyleSetPadding(top->node, YGEdgeBottom, 8);
+	YGNodeStyleSetPaddingPercent(top->node, YGEdgeLeft, 0.8);
+	YGNodeStyleSetPaddingPercent(top->node, YGEdgeRight, 0.8);
 	this->containers.main->add_child(top);
 	this->containers.top = top;
 
@@ -204,25 +349,13 @@ void UI::set_top_container(Color color, float height_perc, float height_min, flo
 	YGNodeStyleSetWidthPercent(top_left->node, 33);
 	YGNodeStyleSetHeightPercent(top_left->node, 100);
 	YGNodeStyleSetFlexDirection(top_left->node, YGFlexDirectionRow);
-	YGNodeStyleSetPadding(top_left->node, YGEdgeTop, 8);
-	YGNodeStyleSetPadding(top_left->node, YGEdgeBottom, 8);
-	YGNodeStyleSetPaddingPercent(top_left->node, YGEdgeLeft, 0.8);
-	YGNodeStyleSetPaddingPercent(top_left->node, YGEdgeRight, 0.8);
 	YGNodeStyleSetGap(top_left->node, YGGutterColumn, 12);
 	YGNodeStyleSetWidthPercent(top_middle->node, 34);
 	YGNodeStyleSetHeightPercent(top_middle->node, 100);
 	YGNodeStyleSetFlexDirection(top_middle->node, YGFlexDirectionRow);
-	YGNodeStyleSetPadding(top_middle->node, YGEdgeTop, 8);
-	YGNodeStyleSetPadding(top_middle->node, YGEdgeBottom, 8);
-	YGNodeStyleSetPaddingPercent(top_middle->node, YGEdgeLeft, 0.8);
-	YGNodeStyleSetPaddingPercent(top_middle->node, YGEdgeRight, 0.8);
 	YGNodeStyleSetWidthPercent(top_right->node, 33);
 	YGNodeStyleSetHeightPercent(top_right->node, 100);
 	YGNodeStyleSetFlexDirection(top_right->node, YGFlexDirectionRow);
-	YGNodeStyleSetPadding(top_right->node, YGEdgeTop, 8);
-	YGNodeStyleSetPadding(top_right->node, YGEdgeBottom, 8);
-	YGNodeStyleSetPaddingPercent(top_right->node, YGEdgeLeft, 0.8);
-	YGNodeStyleSetPaddingPercent(top_right->node, YGEdgeRight, 0.8);
 	YGNodeStyleSetGap(top_right->node, YGGutterColumn, 12);
 	YGNodeStyleSetJustifyContent(top_right->node, YGJustifyFlexEnd);
 
@@ -252,8 +385,25 @@ void UI::set_bot_container(Color color, float height_perc, float height_min, flo
 	YGNodeStyleSetHeightPercent(bot->node, height_perc);
 	YGNodeStyleSetMinHeight(bot->node, height_min);
 	YGNodeStyleSetMaxHeight(bot->node, height_max);
+	YGNodeStyleSetFlexDirection(bot->node, YGFlexDirectionRow);
+	YGNodeStyleSetJustifyContent(bot->node, YGJustifyCenter);
+	YGNodeStyleSetAlignItems(bot->node, YGAlignCenter);
+	YGNodeStyleSetGap(bot->node, YGGutterColumn, 20);
+	YGNodeStyleSetPadding(bot->node, YGEdgeTop, 8);
+	YGNodeStyleSetPadding(bot->node, YGEdgeBottom, 8);
+	YGNodeStyleSetPaddingPercent(bot->node, YGEdgeLeft, 0.8);
+	YGNodeStyleSetPaddingPercent(bot->node, YGEdgeRight, 0.8);
 	this->containers.main->add_child(bot);
 	this->containers.bot = bot;
+
+	const std::vector<ComponentGroup> &comp_groups = App::get().get_comp_groups();
+	for (const ComponentGroup &comp_group : comp_groups) {
+		Button *button = new Button(comp_group.name);
+		button->color = {107, 126, 114, 255};
+
+		this->containers.bot->add_child(button);
+		this->containers.comp_group_buttons.push_back(button);
+	}
 }
 
 void UI::set_mid_container() {

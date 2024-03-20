@@ -19,8 +19,7 @@ std::ostream &operator<<(std::ostream &os, const State &state) {
 	return os;
 }
 
-TruthTableNode::TruthTableNode(size_t depth, std::vector<std::vector<State>> &outputs)
-	: left(nullptr), right(nullptr), outputs(nullptr) {
+TruthTableNode::TruthTableNode(size_t depth, LogicTable &outputs) : left(nullptr), right(nullptr), outputs(nullptr) {
 	if (depth > 0) {
 		this->left = new TruthTableNode(depth - 1, outputs);
 		this->right = new TruthTableNode(depth - 1, outputs);
@@ -47,7 +46,7 @@ TruthTableNode::~TruthTableNode() {
 	}
 }
 
-void TruthTableNode::get_outputs_helper(std::vector<std::vector<State>> &outputs) {
+void TruthTableNode::get_outputs_helper(LogicTable &outputs) {
 	if (this->left != nullptr && this->right != nullptr) {
 		this->left->get_outputs_helper(outputs);
 		this->right->get_outputs_helper(outputs);
@@ -56,8 +55,8 @@ void TruthTableNode::get_outputs_helper(std::vector<std::vector<State>> &outputs
 	}
 }
 
-std::vector<std::vector<State>> TruthTableNode::get_outputs() {
-	std::vector<std::vector<State>> outputs;
+LogicTable TruthTableNode::get_outputs() {
+	LogicTable outputs;
 	this->get_outputs_helper(outputs);
 	return outputs;
 }

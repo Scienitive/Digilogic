@@ -1,7 +1,7 @@
 #include "button.hpp"
 #include "raylib.h"
 #include "textlabel.hpp"
-#include "ui.hpp"
+#include "yoga/YGNode.h"
 #include "yoga/YGNodeStyle.h"
 #include <algorithm>
 #include <functional>
@@ -10,8 +10,9 @@
 
 Button::Button(std::string text) : width(0), width_multiplier(1), on_click([]() {}), old_hovered(false) {
 	this->text_label = new TextLabel(text);
-	YGNodeStyleSetPaddingPercent(this->node, YGEdgeAll, 2);
+	this->set_border_percent(YGEdgeAll, 5);
 	YGNodeStyleSetHeightPercent(this->node, 100);
+	YGNodeStyleSetWidth(this->node, 100);
 	YGNodeInsertChild(this->node, this->text_label->node, 0);
 
 	// Center the textlabel and potentially other elements inside the button

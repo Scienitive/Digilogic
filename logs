@@ -1,0 +1,224 @@
+type: Container
+given width: 100%
+calculated width: 1512
+given height: 100%
+calculated height: 916
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Container
+given width: nanpx
+calculated width: 1512
+given height: 7%
+calculated height: 64
+given padding all: nanpx
+given padding top: 8px
+calculated padding top: 8
+calculated padding bottom: 8
+calculated padding left: 12.096
+calculated padding right: 12.096
+
+type: Container
+given width: 33%
+calculated width: 491
+given height: 100%
+calculated height: 48
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Button
+info: GITHUB
+given width: 137.5px
+calculated width: 138
+given height: 100%
+calculated height: 48
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Container
+given width: 34%
+calculated width: 506
+given height: 100%
+calculated height: 48
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Container
+given width: 33%
+calculated width: 491
+given height: 100%
+calculated height: 48
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Button
+info: SETTINGS
+given width: 183.7px
+calculated width: 184
+given height: 100%
+calculated height: 48
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Button
+info: EXIT
+given width: 91.3px
+calculated width: 91
+given height: 100%
+calculated height: 48
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Container
+given width: nanpx
+calculated width: 1512
+given height: nanpx
+calculated height: 788
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Container
+given width: nanpx
+calculated width: 1512
+given height: 7%
+calculated height: 64
+given padding all: nanpx
+given padding top: 8px
+calculated padding top: 8
+calculated padding bottom: 8
+calculated padding left: 12.096
+calculated padding right: 12.096
+
+type: Button
+info: BUILT-INS
+given width: 206.8px
+calculated width: 207
+given height: 100%
+calculated height: 48
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Button
+info: DEFAULT
+given width: 160.6px
+calculated width: 161
+given height: 100%
+calculated height: 48
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Modal
+given width: nanpx
+calculated width: 400
+given height: 25%
+calculated height: 225
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Container
+given width: 100%
+calculated width: 400
+given height: 50%
+calculated height: 112
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: TextLabel
+info: Are you sure?
+given width: 337px
+calculated width: 337
+given height: 50%
+calculated height: 56
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Container
+given width: 100%
+calculated width: 400
+given height: 50%
+calculated height: 113
+given padding all: 7.5%
+given padding top: nanpx
+calculated padding top: 30
+calculated padding bottom: 30
+calculated padding left: 30
+calculated padding right: 30
+
+type: Button
+info: NO
+given width: 143px
+calculated width: 143
+given height: 100%
+calculated height: 53
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
+type: Button
+info: YES
+given width: 143px
+calculated width: 143
+given height: 100%
+calculated height: 53
+given padding all: nanpx
+given padding top: nanpx
+calculated padding top: 0
+calculated padding bottom: 0
+calculated padding left: 0
+calculated padding right: 0
+
