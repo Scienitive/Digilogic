@@ -12,7 +12,6 @@ TextLabel::TextLabel(std::string t)
 	: text(t), font_name("fonts/JetBrainsMono-Regular.ttf"), font_size(12), spacing(1), text_color(BLACK) {
 	YGNodeStyleSetWidthPercent(this->node, 100);
 	YGNodeStyleSetHeightPercent(this->node, 100);
-	this->font = new FontBank(); // BURAYI SIL
 }
 
 TextLabel::~TextLabel() {}
@@ -40,9 +39,9 @@ float TextLabel::set_font_size() {
 }
 
 Font TextLabel::get_font() {
-	return this->font->get_font(this->font_name, this->font_size);
+	return FontBank::get().get_font(this->font_name, this->font_size);
 }
 
 Font TextLabel::get_font(float font_size) {
-	return this->font->get_font(this->font_name, font_size);
+	return FontBank::get().get_font(this->font_name, font_size);
 }

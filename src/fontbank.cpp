@@ -18,6 +18,11 @@ FontBank::~FontBank() {
 	}
 }
 
+FontBank &FontBank::get() {
+	static FontBank fontbank;
+	return fontbank;
+}
+
 Font FontBank::get_font(std::string font_name, float font_size) {
 	font_size = std::round(font_size);
 	std::pair<std::string, float> pair = {font_name, font_size};

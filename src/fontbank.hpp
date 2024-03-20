@@ -26,10 +26,15 @@ class FontBank {
 	const size_t MAX_SIZE = 30;
 
 public:
-	FontBank();
+	static FontBank &get();
 	~FontBank();
+	FontBank(const FontBank &other) = delete;
+	FontBank &operator=(const FontBank &other) = delete;
 
 	Font get_font(std::string font_name, float font_size);
+
+private:
+	FontBank();
 };
 
 #endif
