@@ -48,9 +48,9 @@ static void set_button_widths(Button *button) {
 	if (button->border_right >= 0) {
 		border_right =
 			clamp(text_width / 100 * button->border_right, button->border_right_max, button->border_right_min);
-		YGNodeStyleSetBorder(button->node, YGEdgeLeft, border_right);
+		YGNodeStyleSetBorder(button->node, YGEdgeRight, border_right);
 	} else {
-		border_right = YGNodeLayoutGetBorder(button->node, YGEdgeLeft);
+		border_right = YGNodeLayoutGetBorder(button->node, YGEdgeRight);
 	}
 
 	button->width = text_width + border_left + border_right;
