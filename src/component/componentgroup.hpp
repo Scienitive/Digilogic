@@ -13,4 +13,6 @@ struct ComponentGroup {
 	~ComponentGroup();
 };
 
+std::vector<ComponentGroup> initialize_component_groups();
+
 #endif

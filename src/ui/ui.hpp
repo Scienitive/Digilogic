@@ -46,10 +46,6 @@ private:
 	UI();
 
 	void set_all_containers();
-	void set_all_modals();
-	void set_top_container(Color color, float height_perc, float height_min, float height_max);
-	void set_mid_container();
-	void set_bot_container(Color color, float height_perc, float height_min, float height_max);
 
 	// if continue_nested == false: it wont search for another <T> under a <T> after finding one
 	template <typename T>
@@ -64,8 +60,6 @@ private:
 			}
 		}
 	}
-
-	void debug_containers();
 
 public:
 	void calculate_layout();
