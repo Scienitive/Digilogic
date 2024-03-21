@@ -1,9 +1,9 @@
 #ifndef UI_HPP
 #define UI_HPP
 
-#include "button.hpp"
-#include "container.hpp"
-#include "modal.hpp"
+#include "button/button.hpp"
+#include "container/container.hpp"
+#include "modal/modal.hpp"
 #include <functional>
 #include <vector>
 
@@ -53,7 +53,17 @@ private:
 
 	// if continue_nested == false: it wont search for another <T> under a <T> after finding one
 	template <typename T>
-	void apply_func_to_all(Container *cont, bool continue_nested, std::function<void(T *)> func);
+	void apply_func_to_all(Container *cont, bool continue_nested, std::function<void(T *)> func) {
+		T *possible_type = dynamic_cast<T *>(cont);
+		if (possible_type != nullptr) {
+			func(possible_type);
+		}
+		if (continue_nested || possible_type == nullptr) {
+			for (Container *c : cont->get_children()) {
+				apply_func_to_all<T>(c, continue_nested, func);
+			}
+		}
+	}
 
 	void debug_containers();
 

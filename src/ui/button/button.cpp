@@ -1,11 +1,10 @@
 #include "button.hpp"
+#include "../textlabel/textlabel.hpp"
 #include "raylib.h"
-#include "textlabel.hpp"
 #include "yoga/YGNode.h"
 #include "yoga/YGNodeStyle.h"
 #include <algorithm>
 #include <functional>
-#include <iostream>
 #include <yoga/Yoga.h>
 
 Button::Button(std::string text) : width(0), width_multiplier(1), on_click([]() {}), old_hovered(false) {

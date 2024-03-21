@@ -1,7 +1,7 @@
 #ifndef MODAL_HPP
 #define MODAL_HPP
 
-#include "container.hpp"
+#include "../container/container.hpp"
 
 struct Modal : public Container {
 	const int MAX_WIDTH = 500;

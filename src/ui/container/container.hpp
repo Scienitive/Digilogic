@@ -39,7 +39,7 @@ public:
 
 	void set_screen_pos();
 
-	// This is something I implemented because there is no YGNodeStyleSetBorderPercent
+	// These are something I implemented because there is no YGNodeStyleSetBorderPercent
 	void set_border_percent(YGEdge edge, float value);
 	void set_border_max_px(YGEdge edge, float value);
 	void set_border_min_px(YGEdge edge, float value);

@@ -198,8 +198,8 @@ calculated padding right: 15
 
 type: Button
 info: NO
-given width: 70.4px
-calculated width: 71
+given width: 77px
+calculated width: 77
 given height: 100%
 calculated height: 27
 given padding all: nanpx
@@ -211,8 +211,8 @@ calculated padding right: 0
 
 type: Button
 info: YES
-given width: 70.4px
-calculated width: 71
+given width: 77px
+calculated width: 77
 given height: 100%
 calculated height: 27
 given padding all: nanpx

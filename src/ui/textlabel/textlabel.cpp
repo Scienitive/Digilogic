@@ -1,10 +1,8 @@
 #include "textlabel.hpp"
-#include "container.hpp"
-#include "yoga/YGConfig.h"
-#include "yoga/YGNode.h"
+#include "../../font/fontbank.hpp"
+#include "../container/container.hpp"
 #include "yoga/YGNodeLayout.h"
 #include "yoga/YGNodeStyle.h"
-#include <iostream>
 #include <raylib.h>
 #include <string>
 

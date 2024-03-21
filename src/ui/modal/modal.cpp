@@ -1,9 +1,8 @@
 #include "modal.hpp"
-#include "raylib.h"
-#include "ui.hpp"
-#include "yoga/YGNode.h"
-#include "yoga/YGNodeStyle.h"
-#include <iostream>
+#include "../ui.hpp"
+#include <raylib.h>
+#include <yoga/YGNode.h>
+#include <yoga/YGNodeStyle.h>
 #include <yoga/Yoga.h>
 
 Modal::Modal() : active(false) {

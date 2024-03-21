@@ -1,8 +1,7 @@
 #ifndef TEXTLABEL_HPP
 #define TEXTLABEL_HPP
 
-#include "../fontbank.hpp"
-#include "container.hpp"
+#include "../container/container.hpp"
 #include <raylib.h>
 #include <string>
 
