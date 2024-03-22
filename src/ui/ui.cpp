@@ -12,7 +12,6 @@
 UI::UI() {
 	// Set main_container and it's properties
 	this->containers.main = new Container();
-	this->containers.main->color = {217, 217, 217, 255};
 	YGNodeStyleSetFlexDirection(this->containers.main->node, YGFlexDirectionColumn);
 	YGNodeStyleSetWidthPercent(this->containers.main->node, 100);
 	YGNodeStyleSetHeightPercent(this->containers.main->node, 100);
@@ -35,12 +34,11 @@ UI &UI::get() {
 	return ui;
 }
 
-void UI::step() {
-	// Recalculate Layout if
-	if (IsWindowResized()) {
-		this->calculate_layout();
-	}
+void UI::resize_action() {
+	this->calculate_layout();
+}
 
+void UI::step() {
 	this->containers.main->step();
 }
 

@@ -21,7 +21,7 @@ int main() {
 
 		// Draw
 		BeginDrawing();
-		ClearBackground(WHITE);
+		ClearBackground({217, 217, 217, 255});
 		app.draw();
 		EndDrawing();
 

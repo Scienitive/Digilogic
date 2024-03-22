@@ -64,6 +64,7 @@ private:
 public:
 	void calculate_layout();
 
+	void resize_action();
 	void step();
 	void draw();
 	void late_step();
