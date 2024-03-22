@@ -21,6 +21,6 @@ void App::camera_controls() {
 		Vector2 mouse_pos_world = GetScreenToWorld2D(mouse_pos_screen, this->cam);
 		this->cam.offset = mouse_pos_screen;
 		this->cam.target = mouse_pos_world;
-		this->cam.zoom = Clamp(this->cam.zoom - (mouse_wheel.y * ZOOM_INCREMENTAL), MIN_ZOOM, MAX_ZOOM);
+		this->cam.zoom = Clamp(this->cam.zoom + (mouse_wheel.y * ZOOM_INCREMENTAL), MIN_ZOOM, MAX_ZOOM);
 	}
 }
