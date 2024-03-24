@@ -44,6 +44,7 @@ public:
 	void set_border_max_px(YGEdge edge, float value);
 	void set_border_min_px(YGEdge edge, float value);
 
+	virtual void early_step();
 	virtual void step();
 	virtual void draw();
 	virtual void late_step();

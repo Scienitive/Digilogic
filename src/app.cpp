@@ -68,6 +68,6 @@ void App::late_step() {
 	UI::get().late_step();
 }
 
-const std::vector<ComponentGroup> App::get_comp_groups() {
+std::vector<ComponentGroup> &App::get_comp_groups() {
 	return this->comp_groups;
 }

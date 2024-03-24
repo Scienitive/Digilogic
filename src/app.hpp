@@ -36,7 +36,7 @@ public:
 	void draw();
 	void late_step();
 
-	const std::vector<ComponentGroup> get_comp_groups();
+	std::vector<ComponentGroup> &get_comp_groups();
 
 private:
 	App();

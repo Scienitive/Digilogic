@@ -2,6 +2,7 @@
 #include "../modal/modal.hpp"
 #include "../ui.hpp"
 #include <raylib.h>
+#include <vector>
 #include <yoga/YGNode.h>
 #include <yoga/YGNodeLayout.h>
 
@@ -18,6 +19,13 @@ Container::~Container() {
 	}
 }
 
+void Container::early_step() {
+	const std::vector<Container *> copy_children = this->children;
+	for (Container *cont : copy_children) {
+		cont->early_step();
+	}
+}
+
 void Container::step() {
 	UI &ui = UI::get();
 	size_t active_modal_count = ui.active_modals.size();
@@ -25,7 +33,9 @@ void Container::step() {
 		(this->am_i_child_of_this(ui.active_modals[active_modal_count - 1]))) {
 		this->set_hovered();
 
-		for (Container *cont : this->children) {
+		// The reason of copying here is: some functions can add to children vector and it causes segfaults
+		const std::vector<Container *> copy_children = this->children;
+		for (Container *cont : copy_children) {
 			cont->step();
 		}
 	}
@@ -39,7 +49,8 @@ void Container::draw() {
 
 	DrawRectangle(this->pos.x, this->pos.y, width, height, this->color);
 
-	for (Container *cont : this->children) {
+	const std::vector<Container *> copy_children = this->children;
+	for (Container *cont : copy_children) {
 		Modal *modal = dynamic_cast<Modal *>(cont);
 		if (modal == nullptr) {
 			cont->draw();
@@ -48,7 +59,8 @@ void Container::draw() {
 }
 
 void Container::late_step() {
-	for (Container *cont : this->children) {
+	const std::vector<Container *> copy_children = this->children;
+	for (Container *cont : copy_children) {
 		cont->late_step();
 	}
 }

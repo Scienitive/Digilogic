@@ -16,6 +16,7 @@ struct AllContainers {
 
 	// Modals
 	Modal *exit_modal;
+	Modal *comp_group_modal;
 
 	// Top
 	Container *top_left;
@@ -65,6 +66,7 @@ public:
 	void calculate_layout();
 
 	void resize_action();
+	void early_step();
 	void step();
 	void draw();
 	void late_step();

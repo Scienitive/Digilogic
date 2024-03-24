@@ -81,10 +81,14 @@ void set_bot_container(UI &ui, Color color, float height_perc, float height_min,
 	ui.containers.main->add_child(bot);
 	ui.containers.bot = bot;
 
-	const std::vector<ComponentGroup> &comp_groups = App::get().get_comp_groups();
-	for (const ComponentGroup &comp_group : comp_groups) {
+	std::vector<ComponentGroup> &comp_groups = App::get().get_comp_groups();
+	for (ComponentGroup &comp_group : comp_groups) {
 		Button *button = new Button(comp_group.name);
 		button->color = {107, 126, 114, 255};
+		button->set_on_click([&ui, &comp_group]() {
+			set_component_group_modal(ui, comp_group);
+			ui.containers.comp_group_modal->activate();
+		});
 
 		ui.containers.bot->add_child(button);
 		ui.containers.comp_group_buttons.push_back(button);

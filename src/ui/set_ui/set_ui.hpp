@@ -1,6 +1,7 @@
 #ifndef SET_UI_HPP
 #define SET_UI_HPP
 
+#include "../../component/componentgroup.hpp"
 #include "../ui.hpp"
 #include <raylib.h>
 
@@ -11,5 +12,6 @@ void set_bot_container(UI &ui, Color color, float height_perc, float height_min,
 
 // Modals
 void set_exit_modal(UI &ui);
+void set_component_group_modal(UI &ui, ComponentGroup &cg);
 
 #endif

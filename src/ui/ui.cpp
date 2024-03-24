@@ -1,8 +1,7 @@
 #include "ui.hpp"
 #include "../app.hpp"
 #include <cstddef>
-#include <fstream>
-#include <functional>
+#include <iostream>
 #include <raylib.h>
 #include <yoga/YGNode.h>
 #include <yoga/YGNodeLayout.h>
@@ -36,6 +35,10 @@ UI &UI::get() {
 
 void UI::resize_action() {
 	this->calculate_layout();
+}
+
+void UI::early_step() {
+	this->containers.main->early_step();
 }
 
 void UI::step() {
