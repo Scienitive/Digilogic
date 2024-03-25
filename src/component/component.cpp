@@ -45,7 +45,7 @@ std::vector<State> *Component::simulate(std::vector<State> input) {
 	// Check if input is valid
 	assert(input.size() == this->input_count && "Error: Simulate input is not valid.");
 
-	TruthTableNode *node = this->truth_table;
+	const TruthTableNode *node = this->truth_table;
 	for (size_t i = 0; i < input.size(); i++) {
 		if (input[i] == HIGH) {
 			node = node->right;

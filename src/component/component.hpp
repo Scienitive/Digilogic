@@ -12,7 +12,7 @@ class Component {
 	size_t input_count;
 	size_t output_count;
 
-	TruthTableNode *truth_table;
+	const TruthTableNode *truth_table;
 
 public:
 	Component(std::string name, size_t input_count, size_t output_count, LogicTable logictable);

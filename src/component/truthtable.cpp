@@ -61,7 +61,13 @@ TruthTableNode::~TruthTableNode() {
 	}
 }
 
-void TruthTableNode::get_logictable_helper(LogicTable &logictable) {
+LogicTable TruthTableNode::get_logictable() const {
+	LogicTable logictable;
+	this->get_logictable_helper(logictable);
+	return logictable;
+}
+
+void TruthTableNode::get_logictable_helper(LogicTable &logictable) const {
 	if (this->left != nullptr && this->right != nullptr) {
 		this->left->get_logictable_helper(logictable);
 		this->right->get_logictable_helper(logictable);
@@ -70,13 +76,7 @@ void TruthTableNode::get_logictable_helper(LogicTable &logictable) {
 	}
 }
 
-LogicTable TruthTableNode::get_logictable() {
-	LogicTable logictable;
-	this->get_logictable_helper(logictable);
-	return logictable;
-}
-
-bool TruthTableNode::is_logictable_valid(size_t input_count, size_t output_count, LogicTable &logictable) {
+bool TruthTableNode::is_logictable_valid(size_t input_count, size_t output_count, LogicTable &logictable) const {
 	if (logictable.size() != 1 << input_count) {
 		return false;
 	}

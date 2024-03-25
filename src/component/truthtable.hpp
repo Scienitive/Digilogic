@@ -22,13 +22,13 @@ struct TruthTableNode {
 	TruthTableNode(size_t input_count, size_t output_count, LogicTable &logictable);
 	~TruthTableNode();
 
-	LogicTable get_logictable();
+	LogicTable get_logictable() const;
 
 private:
 	TruthTableNode();
 
-	void get_logictable_helper(LogicTable &logictable);
-	bool is_logictable_valid(size_t input_count, size_t outputs, LogicTable &logictable);
+	void get_logictable_helper(LogicTable &logictable) const;
+	bool is_logictable_valid(size_t input_count, size_t outputs, LogicTable &logictable) const;
 };
 
 #endif
