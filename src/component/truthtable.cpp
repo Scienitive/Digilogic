@@ -20,33 +20,25 @@ std::ostream &operator<<(std::ostream &os, const State &state) {
 	return os;
 }
 
-TruthTableNode::TruthTableNode() : left(nullptr), right(nullptr), outputs(nullptr) {}
+TruthTableNode::TruthTableNode(size_t depth, size_t input_count, size_t &count, LogicTable &logictable)
+	: left(nullptr), right(nullptr), outputs(nullptr) {
+	if (depth < input_count - 1) {
+		this->left = new TruthTableNode(depth + 1, input_count, count, logictable);
+		this->right = new TruthTableNode(depth + 1, input_count, count, logictable);
+
+	} else {
+		this->outputs = new std::vector<State>(logictable[count]);
+		count++;
+	}
+}
 
 TruthTableNode::TruthTableNode(size_t input_count, size_t output_count, LogicTable &logictable)
 	: left(nullptr), right(nullptr), outputs(nullptr) {
 	assert(this->is_logictable_valid(input_count, output_count, logictable) && "Error: LogicTable is not valid.");
 
-	for (size_t i = 0; i < (1 << input_count); i++) {
-		TruthTableNode *node = this;
-
-		for (size_t j = 0; j < input_count; j++) {
-			if (i & (1 << j)) {
-				if (node->right == nullptr) {
-					node->right = new TruthTableNode();
-				}
-				node = node->right;
-			} else {
-				if (node->left == nullptr) {
-					node->left = new TruthTableNode();
-				}
-				node = node->left;
-			}
-
-			if (j == input_count - 1) {
-				node->outputs = new std::vector<State>(logictable[i]);
-			}
-		}
-	}
+	size_t count = 0;
+	this->left = new TruthTableNode(0, input_count, count, logictable);
+	this->right = new TruthTableNode(0, input_count, count, logictable);
 }
 
 TruthTableNode::~TruthTableNode() {

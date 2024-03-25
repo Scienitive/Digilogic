@@ -25,7 +25,7 @@ struct TruthTableNode {
 	LogicTable get_logictable() const;
 
 private:
-	TruthTableNode();
+	TruthTableNode(size_t depth, size_t input_count, size_t &count, LogicTable &logictable);
 
 	void get_logictable_helper(LogicTable &logictable) const;
 	bool is_logictable_valid(size_t input_count, size_t outputs, LogicTable &logictable) const;
