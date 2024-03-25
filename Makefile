@@ -21,7 +21,7 @@ TEST_SRCS=$(shell find $(TEST_DIR) -name '*.cpp')
 TEST_OBJS=$(TEST_SRCS:$(TEST_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 TEST_BIN=$(BIN_DIR)/$(TEST_NAME)
 
-all: $(BIN) run
+all: $(BIN) $(TEST_BIN) run
 
 $(BIN): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $@
@@ -53,4 +53,4 @@ run:
 run_test:
 	./$(BIN_DIR)/$(TEST_NAME)
 
-.PHONY: clean run re debug
+.PHONY: clean run re debug test runt_test
