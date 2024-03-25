@@ -1,4 +1,5 @@
 #include "truthtable.hpp"
+#include <cassert>
 #include <cstddef>
 #include <cstdlib>
 #include <iostream>
@@ -19,18 +20,32 @@ std::ostream &operator<<(std::ostream &os, const State &state) {
 	return os;
 }
 
-TruthTableNode::TruthTableNode(size_t depth, LogicTable &outputs) : left(nullptr), right(nullptr), outputs(nullptr) {
-	if (depth > 0) {
-		this->left = new TruthTableNode(depth - 1, outputs);
-		this->right = new TruthTableNode(depth - 1, outputs);
-	} else {
-		if (outputs.size() <= 0) {
-			std::cerr << "TruthTableNode Leaf Nodes Filling Error" << std::endl;
-			exit(1);
+TruthTableNode::TruthTableNode() : left(nullptr), right(nullptr), outputs(nullptr) {}
+
+TruthTableNode::TruthTableNode(size_t input_count, size_t output_count, LogicTable &logictable)
+	: left(nullptr), right(nullptr), outputs(nullptr) {
+	assert(this->is_logictable_valid(input_count, output_count, logictable) && "Error: LogicTable is not valid.");
+
+	for (size_t i = 0; i < (1 << input_count); i++) {
+		TruthTableNode *node = this;
+
+		for (size_t j = 0; j < input_count; j++) {
+			if (i & (1 << j)) {
+				if (node->right == nullptr) {
+					node->right = new TruthTableNode();
+				}
+				node = node->right;
+			} else {
+				if (node->left == nullptr) {
+					node->left = new TruthTableNode();
+				}
+				node = node->left;
+			}
+
+			if (j == input_count - 1) {
+				node->outputs = new std::vector<State>(logictable[i]);
+			}
 		}
-		this->outputs = new std::vector<State>(outputs[0]);
-		/* outputs.erase(outputs.begin()); // BU KISMA BI BAK BU COK SACMA BI DIZAYN (SIMDILIK DEVRE DISI AMA PROBLEM
-		 * OLURSA BAK BURAYA) */
 	}
 }
 
@@ -46,17 +61,29 @@ TruthTableNode::~TruthTableNode() {
 	}
 }
 
-void TruthTableNode::get_outputs_helper(LogicTable &outputs) {
+void TruthTableNode::get_logictable_helper(LogicTable &logictable) {
 	if (this->left != nullptr && this->right != nullptr) {
-		this->left->get_outputs_helper(outputs);
-		this->right->get_outputs_helper(outputs);
+		this->left->get_logictable_helper(logictable);
+		this->right->get_logictable_helper(logictable);
 	} else {
-		outputs.push_back(*this->outputs);
+		logictable.push_back(*this->outputs);
 	}
 }
 
-LogicTable TruthTableNode::get_outputs() {
-	LogicTable outputs;
-	this->get_outputs_helper(outputs);
-	return outputs;
+LogicTable TruthTableNode::get_logictable() {
+	LogicTable logictable;
+	this->get_logictable_helper(logictable);
+	return logictable;
+}
+
+bool TruthTableNode::is_logictable_valid(size_t input_count, size_t output_count, LogicTable &logictable) {
+	if (logictable.size() != 1 << input_count) {
+		return false;
+	}
+	for (std::vector<State> &output : logictable) {
+		if (output.size() != output_count) {
+			return false;
+		}
+	}
+	return true;
 }

@@ -1,5 +1,6 @@
 #include "componentgroup.hpp"
 #include "component.hpp"
+#include "truthtable.hpp"
 
 ComponentGroup::ComponentGroup(std::string name) : name(name) {}
 
