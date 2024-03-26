@@ -9,12 +9,13 @@ void set_component_group_modal(UI &ui, ComponentGroup &cg) {
 	YGNodeStyleSetFlexDirection(modal->node, YGFlexDirectionRow);
 	YGNodeStyleSetGap(modal->node, YGGutterAll, 10);
 	YGNodeStyleSetFlexWrap(modal->node, YGWrapWrap);
+	modal->set_border_percent(YGEdgeAll, 5);
 
 	for (Component &comp : cg.components) {
 		Container *comp_container = new Container();
 		comp_container->color = RED;
-		YGNodeStyleSetWidth(comp_container->node, 80);
-		YGNodeStyleSetHeight(comp_container->node, 80);
+		YGNodeStyleSetWidthPercent(comp_container->node, 20);
+		YGNodeStyleSetHeightPercent(comp_container->node, 20);
 
 		modal->add_child(comp_container);
 	}

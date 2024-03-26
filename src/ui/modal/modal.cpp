@@ -2,6 +2,7 @@
 #include "../ui.hpp"
 #include <raylib.h>
 #include <yoga/YGNode.h>
+#include <yoga/YGNodeLayout.h>
 #include <yoga/YGNodeStyle.h>
 #include <yoga/Yoga.h>
 
@@ -20,12 +21,13 @@ void Modal::set_size(float aspect_ratio, float height_percentage, float height_m
 void Modal::calculate_layout() {
 	YGNodeStyleSetAspectRatio(this->node, this->aspect_ratio);
 	YGNodeStyleSetHeightPercent(this->node, this->height_percentage);
+	YGNodeStyleSetWidth(this->node, GetScreenHeight() / 100.0f * this->height_percentage * this->aspect_ratio);
 	YGNodeStyleSetMaxHeight(this->node, this->height_max_px);
 	YGNodeStyleSetMaxWidth(this->node, this->aspect_ratio * this->height_max_px);
 	YGNodeCalculateLayout(this->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
 
 	float height = YGNodeLayoutGetHeight(this->node);
-	float width = this->aspect_ratio * height;
+	float width = YGNodeLayoutGetWidth(this->node);
 
 	// Position setting
 	YGNodeStyleSetPosition(this->node, YGEdgeLeft, (GetScreenWidth() / 2.0) - (width / 2.0));

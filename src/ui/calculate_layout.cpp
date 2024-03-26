@@ -1,4 +1,5 @@
 #include "ui.hpp"
+#include <iostream>
 
 // Negative values on min and max means disabled
 static float mod_clamp(float value, float max, float min) {
@@ -16,6 +17,9 @@ static void set_border_percentages(Container *cont) {
 
 	if (cont->border_top >= 0) {
 		float border_top = mod_clamp(height / 100 * cont->border_top, cont->border_top_max, cont->border_top_min);
+		if (dynamic_cast<Modal *>(cont) != nullptr) {
+			std::cout << height << std::endl;
+		}
 		YGNodeStyleSetBorder(cont->node, YGEdgeTop, border_top);
 	}
 	if (cont->border_bottom >= 0) {
@@ -25,6 +29,9 @@ static void set_border_percentages(Container *cont) {
 	}
 	if (cont->border_left >= 0) {
 		float border_left = mod_clamp(width / 100 * cont->border_left, cont->border_left_max, cont->border_left_min);
+		if (dynamic_cast<Modal *>(cont) != nullptr) {
+			std::cout << width << std::endl;
+		}
 		YGNodeStyleSetBorder(cont->node, YGEdgeLeft, border_left);
 	}
 	if (cont->border_right >= 0) {
@@ -74,15 +81,15 @@ static void set_linked_button_widths(Button *button) {
 void UI::calculate_layout() {
 	YGNodeCalculateLayout(this->containers.main->node, GetScreenWidth(), GetScreenHeight(), YGDirectionLTR);
 
+	// Set all modal width, height and positions
+	this->apply_func_to_all<Modal>(this->containers.main, false, [](Modal *modal) { modal->calculate_layout(); });
+
 	// Set all border percentage values
 	this->apply_func_to_all<Container>(this->containers.main, true, set_border_percentages);
 
 	// Set all button widths
 	this->apply_func_to_all<Button>(this->containers.main, false, set_button_widths);
 	this->apply_func_to_all<Button>(this->containers.main, false, set_linked_button_widths);
-
-	// Set all modal width, height and positions
-	this->apply_func_to_all<Modal>(this->containers.main, false, [](Modal *modal) { modal->calculate_layout(); });
 
 	// TODO You can optimise this by only going through TextLabel's that don't belong to a button (because
 	// button->textlabels are handled on button part of this function).
