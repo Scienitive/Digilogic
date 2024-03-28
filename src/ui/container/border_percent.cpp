@@ -1,4 +1,5 @@
 #include "container.hpp"
+#include <tuple>
 
 void Container::set_border_percent(YGEdge edge, float value) {
 	YGDirection direction = YGNodeLayoutGetDirection(this->node);
@@ -135,4 +136,20 @@ void Container::set_border_min_px(YGEdge edge, float value) {
 		this->border_bottom_min = value;
 		break;
 	}
+}
+
+std::tuple<float, float, float> Container::get_border_top() {
+	return std::make_tuple(this->border_top, this->border_top_min, this->border_top_max);
+}
+
+std::tuple<float, float, float> Container::get_border_bottom() {
+	return std::make_tuple(this->border_bottom, this->border_bottom_min, this->border_bottom_max);
+}
+
+std::tuple<float, float, float> Container::get_border_left() {
+	return std::make_tuple(this->border_left, this->border_left_min, this->border_left_max);
+}
+
+std::tuple<float, float, float> Container::get_border_right() {
+	return std::make_tuple(this->border_right, this->border_right_min, this->border_right_max);
 }

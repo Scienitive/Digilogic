@@ -11,7 +11,7 @@ Button::Button(std::string text) : width(0), width_multiplier(1), on_click([]() 
 	this->text_label = new TextLabel(text);
 	this->set_border_percent(YGEdgeAll, 5);
 	YGNodeStyleSetHeightPercent(this->node, 100);
-	YGNodeStyleSetWidth(this->node, 100);
+	/* YGNodeStyleSetWidth(this->node, 100); */
 	YGNodeInsertChild(this->node, this->text_label->node, 0);
 
 	// Center the textlabel and potentially other elements inside the button

@@ -34,7 +34,13 @@ UI &UI::get() {
 }
 
 void UI::resize_action() {
-	this->calculate_layout();
+	// BUG Well this is fucked up but otherwise it doesn't work properly for somethings
+	// I think YogaLayout is not a great UI Layout Engine
+	// I need to rewrite the all calculate_layout system if it becomes slow and effects the program heavily
+	// but for now I'm going to make this dirty like this
+	for (size_t i = 0; i < 2; i++) {
+		this->calculate_layout();
+	}
 }
 
 void UI::early_step() {

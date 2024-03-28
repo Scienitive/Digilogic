@@ -9,7 +9,8 @@
 Container::Container()
 	: color(BLANK), border_top(-1), border_bottom(-1), border_left(-1), border_right(-1), border_top_max(-1),
 	  border_top_min(-1), border_bottom_max(-1), border_bottom_min(-1), border_left_max(-1), border_left_min(-1),
-	  border_right_max(-1), border_right_min(-1) {
+	  border_right_max(-1), border_right_min(-1), gap_row(-1), gap_column(-1), gap_row_max(-1), gap_row_min(-1),
+	  gap_column_max(-1), gap_column_min(-1) {
 	this->node = YGNodeNew();
 }
 
